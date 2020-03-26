@@ -58,7 +58,10 @@
       thisProduct.id = id;
       thisProduct.data = data;
       thisProduct.renderInMenu();
+      thisProduct.getElements();
       thisProduct.initAccordion();
+      thisProduct.initOrderForm();
+      thisProduct.processOrder();
       console.log('new Product:', thisProduct);
     }
     renderInMenu() {
@@ -75,6 +78,21 @@
       menuContainer.appendChild(thisProduct.element);
     }
 
+    getElements() {
+      const thisProduct = this;
+
+      thisProduct.accordionTrigger = thisProduct.element.querySelector(select.menuProduct.clickable);
+      // console.log(thisProduct.accordionTrigger);
+      thisProduct.form = thisProduct.element.querySelector(select.menuProduct.form);
+      // console.log(thisProduct.form);
+      thisProduct.formInputs = thisProduct.form.querySelectorAll(select.all.formInputs);
+      // console.log(thisProduct.formInputs);
+      thisProduct.cartButton = thisProduct.element.querySelector(select.menuProduct.cartButton);
+      // console.log(thisProduct.cartButton);
+      thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
+      console.log(thisProduct.priceElem.textContent);
+    }
+
     initAccordion() {
       const thisProduct = this;
       console.log(thisProduct.element);
@@ -85,6 +103,7 @@
         clicked.addEventListener('click', function (e) {
           /* prevent default action for event */
           e.preventDefault();
+
           /* toggle active class on element of thisProduct */
           thisProduct.element.classList.toggle('active');
           /* find all active products */
@@ -102,6 +121,78 @@
         });
       }
       /* END: click event listener to trigger */
+    }
+
+    initOrderForm() {
+      const thisProduct = this;
+      console.log('initOrderForm');
+      thisProduct.form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        thisProduct.processOrder();
+      });
+
+      for (let input of thisProduct.formInputs) {
+        input.addEventListener('change', function () {
+          thisProduct.processOrder();
+        });
+      }
+
+      thisProduct.cartButton.addEventListener('click', function (event) {
+        event.preventDefault();
+        thisProduct.processOrder();
+      });
+    }
+
+    processOrder() {
+      const thisProduct = this;
+      /* read all data from the form (using utils.serializeFormToObject) and save it to const formData */
+      const formData = utils.serializeFormToObject(thisProduct.form);
+
+      /* set variable price to equal thisProduct.data.price */
+      let price = thisProduct.data.price;
+
+      /* START LOOP: for each paramId in thisProduct.data.params */
+
+      for (const paramID in thisProduct.data.params) {
+        if (thisProduct.data.params.hasOwnProperty(paramID)) {
+
+          /* save the element in thisProduct.data.params with key paramId as const param */
+          const param = thisProduct.data.params[paramID];
+          console.log(param);
+
+          /* START LOOP: for each optionId in param.options */
+          for (const optionId in param.options) {
+            if (param.options.hasOwnProperty(optionId)) {
+
+              /* save the element in param.options with key optionId as const option */
+              const option = param.options[optionId];
+              console.log(option);
+
+              // check if formData[paramId] exist and then if it contain 
+              const optionSelected = formData.hasOwnProperty(paramID) && formData[paramID].indexOf(optionId) > -1;
+
+              console.log(optionSelected.price);
+
+              /* START IF: if option is selected and option is not default */
+              if (optionSelected && !option.default) {
+
+                /* add price of option to variable price */
+                price = price + option.price;
+
+                /* END IF: if option is selected and option is not default */
+              } else if (!optionSelected && option.default) {
+
+                /* START ELSE IF: if option is not selected and option is default */
+                price = price - option.price;
+
+                /* deduct price of option from price */
+              }
+              thisProduct.priceElem.textContent = price;
+              console.log('price', price);
+            }
+          }
+        }
+      }
     }
   }
 

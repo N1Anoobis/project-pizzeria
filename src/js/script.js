@@ -90,7 +90,10 @@
       thisProduct.cartButton = thisProduct.element.querySelector(select.menuProduct.cartButton);
       // console.log(thisProduct.cartButton);
       thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
-      console.log(thisProduct.priceElem.textContent);
+
+      thisProduct.imageWrapper = thisProduct.element.querySelector(select.menuProduct.imageWrapper);
+      console.log(thisProduct.imageWrapper);
+
     }
 
     initAccordion() {
@@ -166,12 +169,12 @@
 
               /* save the element in param.options with key optionId as const option */
               const option = param.options[optionId];
-              console.log(option);
+              console.log(option.label);
 
               // check if formData[paramId] exist and then if it contain 
               const optionSelected = formData.hasOwnProperty(paramID) && formData[paramID].indexOf(optionId) > -1;
 
-              console.log(optionSelected.price);
+              console.log(optionSelected);
 
               /* START IF: if option is selected and option is not default */
               if (optionSelected && !option.default) {
@@ -186,6 +189,19 @@
                 price = price - option.price;
 
                 /* deduct price of option from price */
+              }
+              const allIMG = thisProduct.imageWrapper.querySelectorAll(`.${paramID}-${optionId}`);
+
+              if (optionSelected) {
+                for (const allI of allIMG) {
+                  allI.classList.add('active');
+                }
+
+              } else {
+                for (const allI of allIMG) {
+                  allI.classList.remove('active');
+                }
+
               }
               thisProduct.priceElem.textContent = price;
               console.log('price', price);

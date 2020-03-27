@@ -61,6 +61,7 @@
       thisProduct.getElements();
       thisProduct.initAccordion();
       thisProduct.initOrderForm();
+      thisProduct.initAmountWidget();
       thisProduct.processOrder();
       console.log('new Product:', thisProduct);
     }
@@ -92,8 +93,8 @@
       thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
 
       thisProduct.imageWrapper = thisProduct.element.querySelector(select.menuProduct.imageWrapper);
-      console.log(thisProduct.imageWrapper);
-
+      // console.log(thisProduct.imageWrapper);
+      thisProduct.amountWidgetElem = thisProduct.element.querySelector(select.menuProduct.amountWidget);
     }
 
     initAccordion() {
@@ -157,24 +158,26 @@
       /* START LOOP: for each paramId in thisProduct.data.params */
 
       for (const paramID in thisProduct.data.params) {
+        // console.log('paramID', paramID);
         if (thisProduct.data.params.hasOwnProperty(paramID)) {
 
           /* save the element in thisProduct.data.params with key paramId as const param */
           const param = thisProduct.data.params[paramID];
-          console.log(param);
+          // console.log('param', param);
 
           /* START LOOP: for each optionId in param.options */
           for (const optionId in param.options) {
+            // console.log('optionId', optionId);
             if (param.options.hasOwnProperty(optionId)) {
 
               /* save the element in param.options with key optionId as const option */
               const option = param.options[optionId];
-              console.log(option.label);
+              // console.log(option.label);
 
               // check if formData[paramId] exist and then if it contain 
               const optionSelected = formData.hasOwnProperty(paramID) && formData[paramID].indexOf(optionId) > -1;
 
-              console.log(optionSelected);
+              // console.log('optionSelected', optionSelected);
 
               /* START IF: if option is selected and option is not default */
               if (optionSelected && !option.default) {
@@ -203,20 +206,101 @@
                 }
 
               }
-              thisProduct.priceElem.textContent = price;
-              console.log('price', price);
+              //two last lines removed from here because double loop caused wrong price value
             }
           }
         }
       }
+      // multiply price by amount
+      price *= thisProduct.amountWidget.value;
+
+      thisProduct.priceElem.textContent = price;
+      // console.log('price', price);
     }
+
+    initAmountWidget() {
+      const thisProduct = this;
+
+      thisProduct.amountWidget = new AnountWidget(thisProduct.amountWidgetElem);
+
+      thisProduct.amountWidgetElem.addEventListener('updated', function () {
+        thisProduct.processOrder();
+      });
+    }
+
+  }
+
+  class AnountWidget {
+    constructor(element) {
+      const thisWidget = this;
+      thisWidget.getElements(element);
+      thisWidget.value = settings.amountWidget.defaultValue;
+      thisWidget.setValue(thisWidget.input.value);
+      thisWidget.initActions();
+      console.log('AmountWidget', thisWidget);
+      console.log('constructor arguments', element);
+    }
+
+    getElements(element) {
+      const thisWidget = this;
+
+      thisWidget.element = element;
+      thisWidget.input = thisWidget.element.querySelector(select.widgets.amount.input);
+      thisWidget.linkDecrease = thisWidget.element.querySelector(select.widgets.amount.linkDecrease);
+      thisWidget.linkIncrease = thisWidget.element.querySelector(select.widgets.amount.linkIncrease);
+    }
+
+    setValue(value) {
+      const thisWidget = this;
+
+      const newValue = parseInt(value);
+
+      // Add validation
+
+      if (newValue != thisWidget.value && newValue >= settings.amountWidget.defaultMin && newValue <= settings.amountWidget.defaultMax) {
+        thisWidget.value = newValue;
+        thisWidget.announce();
+      }
+      thisWidget.input.value = thisWidget.value;
+      console.log('new////Value', thisWidget.value);
+    }
+
+    initActions() {
+      const thisWidget = this;
+
+      thisWidget.input.addEventListener('change', function () {
+        console.log('dziala.');
+        thisWidget.setValue(thisWidget.input.value);
+      });
+
+      thisWidget.linkDecrease.addEventListener('click', function (e) {
+        e.preventDefault();
+        thisWidget.setValue(thisWidget.value - 1);
+        console.log('dziala.');
+      });
+
+      thisWidget.linkIncrease.addEventListener('click', function (e) {
+        e.preventDefault();
+        thisWidget.setValue(thisWidget.value + 1);
+        console.log('dziala.');
+      });
+
+    }
+
+    announce() {
+      const thisWidget = this;
+
+      const event = new Event('updated');
+      thisWidget.element.dispatchEvent(event);
+    }
+
   }
 
   const app = {
 
     initMenu: function () {
       const thisApp = this;
-      console.log('thisApp.data:', thisApp.data);
+      // console.log('thisApp.data:', thisApp.data);
 
 
       for (let productData in thisApp.data.products) {

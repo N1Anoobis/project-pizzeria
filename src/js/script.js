@@ -98,59 +98,59 @@
     }
 
     // version with no if
-    initAccordion() {
-      const thisProduct = this;
-
-      const clickedElements = thisProduct.element.querySelectorAll(select.menuProduct.clickable);
-      for (const clEl of clickedElements) {
-        clEl.addEventListener('click', function (e) {
-          e.preventDefault();
-          const allInactiveElements = document.querySelectorAll(select.all.menuProducts);
-          for (const allInEl of allInactiveElements) {
-
-            console.log('all elements', allInEl);
-
-            allInEl.classList.remove('active');
-          }
-
-          clEl.parentNode.classList.toggle('active');
-
-        });
-      }
-
-    }
-
-
-
     // initAccordion() {
     //   const thisProduct = this;
-    //   console.log(thisProduct.element);
-    //   /* find the clickable trigger (the element that should react to clicking) */
-    //   const clickedElements = thisProduct.element.querySelectorAll(select.menuProduct.clickable);
-    //   /* START: click event listener to trigger */
-    //   for (const clicked of clickedElements) {
-    //     clicked.addEventListener('click', function (e) {
-    //       /* prevent default action for event */
-    //       e.preventDefault();
 
-    //       /* toggle active class on element of thisProduct */
-    //       thisProduct.element.classList.toggle('active');
-    //       /* find all active products */
-    //       const allActiveProd = document.querySelectorAll(select.all.menuProductsActive);
-    //       /* START LOOP: for each active product */
-    //       for (const allAct of allActiveProd) {
-    //         /* START: if the active product isn't the element of thisProduct */
-    //         if (allAct != clicked.parentNode) {
-    //           /* remove class active for the active product */
-    //           allAct.classList.remove('active');
-    //         }
-    //         /* END: if the active product isn't the element of thisProduct */
+    //   const clickedElements = thisProduct.element.querySelectorAll(select.menuProduct.clickable);
+    //   for (const clEl of clickedElements) {
+    //     clEl.addEventListener('click', function (e) {
+    //       e.preventDefault();
+    //       const allInactiveElements = document.querySelectorAll(select.all.menuProducts);
+    //       for (const allInEl of allInactiveElements) {
+
+    //         console.log('all elements', allInEl);
+
+    //         allInEl.classList.remove('active');
     //       }
-    //       /* END LOOP: for each active product */
+
+    //       clEl.parentNode.classList.toggle('active');
+
     //     });
     //   }
-    //   /* END: click event listener to trigger */
+
     // }
+
+
+
+    initAccordion() {
+      const thisProduct = this;
+      console.log(thisProduct.element);
+      /* find the clickable trigger (the element that should react to clicking) */
+      const clickedElements = thisProduct.element.querySelectorAll(select.menuProduct.clickable);
+      /* START: click event listener to trigger */
+      for (const clicked of clickedElements) {
+        clicked.addEventListener('click', function (e) {
+          /* prevent default action for event */
+          e.preventDefault();
+
+          /* toggle active class on element of thisProduct */
+          thisProduct.element.classList.toggle('active');
+          /* find all active products */
+          const allActiveProd = document.querySelectorAll(select.all.menuProductsActive);
+          /* START LOOP: for each active product */
+          for (const allAct of allActiveProd) {
+            /* START: if the active product isn't the element of thisProduct */
+            if (allAct != clicked.parentNode) {
+              /* remove class active for the active product */
+              allAct.classList.remove('active');
+            }
+            /* END: if the active product isn't the element of thisProduct */
+          }
+          /* END LOOP: for each active product */
+        });
+      }
+      /* END: click event listener to trigger */
+    }
 
     initOrderForm() {
       const thisProduct = this;

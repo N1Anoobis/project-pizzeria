@@ -155,7 +155,6 @@
 
     //     });
     //   }
-
     // }
 
     initAccordion() {
@@ -311,9 +310,9 @@
 
       // reseting prouct to default after adding to cart
       for (const input of thisProduct.formInputs) {
-    
+
         input.checked = false;
-     
+
         if (input.defaultChecked) {
           input.checked = true;
         }
@@ -422,7 +421,7 @@
       thisCart.getElements(element);
       thisCart.initActions();
       // thisCart.update();
-      // console.log('new Cart', thisCart);
+    
     }
 
     getElements(element) {
@@ -462,9 +461,48 @@
       });
       thisCart.dom.form.addEventListener('submit', function (e) {
         e.preventDefault();
-        thisCart.sendOrder();
-        thisCart.dom.wrapper.classList.toggle(classNames.cart.wrapperActive);
+        // console.log('thisCart.products', thisCart.products);
+        // console.log('thisCart.products.lenght', Object.keys(thisCart.products).length);
+        // console.log(thisCart.products);
+
+
+        // taking lenght of object!
+        if (!Object.keys(thisCart.products).length) {
+          return;
+        } else {
+          if (thisCart.dom.inputPhone.value == '' || thisCart.dom.inputAddress.value == '') {
+            // console.log(e.current.value);
+            thisCart.dom.inputPhone.classList.add('error');
+            thisCart.dom.inputAddress.classList.add('error');
+            return;
+
+          }
+
+          // if (thisCart.dom.inputAddress.value == '') {
+          //   console.log(e.current.value);
+          //   thisCart.dom.inputAddress.classList.add('error');
+          //   return;
+
+          // }
+          thisCart.dom.inputPhone.classList.remove('error');
+          thisCart.dom.inputAddress.classList.remove('error');
+
+          thisCart.sendOrder();
+          thisCart.dom.wrapper.classList.toggle(classNames.cart.wrapperActive);
+          // console.log(thisCart.dom.inputPhone.value);
+          // console.log(thisCart.dom.inputAddress.value);
+
+
+        }
+
       });
+      thisCart.dom.inputPhone.addEventListener('change', function (e) {
+        e.preventDefault();
+        let data = e.target.value.lenght;
+        console.log(data);
+
+      });
+
     }
 
     sendOrder() {
@@ -526,7 +564,7 @@
       console.log(thisCart.products);
       // thisCart.CartProduct = new CartProduct(menuProduct, thisCart.element);
       thisCart.update();
-      console.log(menuProduct.data.params);
+      console.log(thisCart.products.lenght);
       let activeProduct = document.querySelector('#product-list > .product.active h3').textContent;
 
       // activeProduct.remove();
@@ -570,6 +608,11 @@
       thisCart.products.splice(index, 1);
       cartProduct.dom.wrapper.remove();
       thisCart.update();
+      // if cart is empty then reset additional styles
+      if (!thisCart.products)
+        thisCart.dom.inputPhone.classList.remove('error');
+      thisCart.dom.inputAddress.classList.remove('error');
+      thisCart.dom.wrapper.classList.toggle(classNames.cart.wrapperActive);
     }
     //clearing cart after submiting order
     clearBasket(cartProduct) {

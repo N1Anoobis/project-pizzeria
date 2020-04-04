@@ -266,6 +266,7 @@
                   };
                 }
                 thisProduct.params[paramID].options[optionId] = option.label;
+                // console.log(thisProduct.params.options);
                 for (const allI of allIMG) {
                   allI.classList.add(classNames.menuProduct.imageVisible);
                 }
@@ -325,7 +326,7 @@
       thisProduct.select = thisProduct.element.querySelector('li select option');
       const numberOfMeals = thisProduct.amountWidgetElem.querySelector(select.widgets.amount.input);
       numberOfMeals.value = 1;
-     
+
       //   this way the pictures in pizza refresh as well without one line of code
       thisProduct.processOrder();
       thisProduct.priceElem.textContent = thisProduct.data.price;
@@ -453,6 +454,11 @@
       thisCart.dom.productList.addEventListener('remove', function () {
         thisCart.remove(event.detail.cartProduct);
       });
+      // custom event attempt
+      thisCart.dom.productList.addEventListener('edit', function () {
+        // thisCart.edit(event.detail.cartProduct);
+        return (event.detail.cartProduct);
+      });
       thisCart.dom.form.addEventListener('submit', function (e) {
         e.preventDefault();
 
@@ -488,7 +494,7 @@
 
         thisCart.dom.inputPhone.classList.remove('error');
         if (mobile.length < 9) {
-       
+
           thisCart.dom.inputPhone.classList.add('error');
 
           return;
@@ -497,7 +503,7 @@
       // event input to check current value of input
       thisCart.dom.inputAddress.addEventListener('input', function (e) {
         e.preventDefault();
-     
+
         thisCart.dom.inputAddress.classList.remove('error');
         let adress = thisCart.dom.inputAddress.value;
 
@@ -526,9 +532,9 @@
       };
 
       for (const prod of thisCart.products) {
-        // let result = prod.getData();
+        // let result = prod.getData();payload
         payload.products.push(prod.getData());
-      
+
       }
 
       const options = {
@@ -608,6 +614,11 @@
         thisCart.dom.wrapper.classList.toggle(classNames.cart.wrapperActive);
       }
     }
+
+    // edit(cartProduct) {
+    //   console.log(cartProduct);
+    // }
+
     //clearing cart after submiting order
     clearBasket(cartProduct) {
       const thisCart = this;
@@ -627,12 +638,13 @@
       const thisCartProduct = this;
 
       thisCartProduct.id = menuProduct.id;
+      // console.log(thisCartProduct.id);
       thisCartProduct.name = menuProduct.name;
       thisCartProduct.price = menuProduct.price;
       thisCartProduct.priceSingle = menuProduct.priceSingle;
       thisCartProduct.amount = menuProduct.amount;
       thisCartProduct.params = JSON.parse(JSON.stringify(menuProduct.params));
-
+      // console.log(thisCartProduct.params);
       thisCartProduct.getElements(element);
       thisCartProduct.initAmountWidget();
       thisCartProduct.initActions();
@@ -676,12 +688,24 @@
       thisCartProduct.dom.wrapper.dispatchEvent(event);
     }
 
+    edit() {
+      const thisCartProduct = this;
+      // console.log(thisCartProduct);
+      const event = new CustomEvent('edit', {
+        bubbles: true,
+        detail: {
+          cartProduct: thisCartProduct,
+        },
+      });
+      thisCartProduct.dom.wrapper.dispatchEvent(event);
+    }
+
     initActions() {
       const thisCartProduct = this;
 
       thisCartProduct.dom.edit.addEventListener('click', function (e) {
         e.preventDefault();
-        thisCartProduct.remove();
+        thisCartProduct.edit();
       });
       thisCartProduct.dom.remove.addEventListener('click', function (e) {
         e.preventDefault();
@@ -690,16 +714,46 @@
     }
 
     getData() {
-      const thisCartProduct = this;
+      let number = 1;
 
-      const dataFromCartProduct = {
-        id: thisCartProduct.id,
-        amount: thisCartProduct.amount,
-        price: thisCartProduct.price,
-        priceSingle: thisCartProduct.priceSingle,
-        params: thisCartProduct.params,
-      };
-      // function return object
+      const thisCartProduct = this;
+      let dataFromCartProduct = {};
+      const object = thisCartProduct.params;
+      // console.log(object);
+      for (const key in object) {
+        if (object.hasOwnProperty(key)) {
+          const element = object[key];
+          // console.log('key', key);
+          // console.log('object[key]', element);
+
+          for (const option in element) {
+            if (element.hasOwnProperty(option)) {
+              const newVar = element[option];
+              console.log(newVar);
+              // console.log('option', option);
+
+
+              console.log(number);
+              dataFromCartProduct = {
+                id: thisCartProduct.id,
+                amount: thisCartProduct.amount,
+                price: thisCartProduct.price,
+                priceSingle: thisCartProduct.priceSingle,
+                params: {},
+              };
+
+
+              // function return object
+              dataFromCartProduct.params = newVar;
+            }
+            
+            number++;
+          }
+          //3
+        }
+
+      }
+
       return dataFromCartProduct;
     }
   }

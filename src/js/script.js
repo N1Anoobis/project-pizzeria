@@ -714,46 +714,40 @@
     }
 
     getData() {
-      let number = 1;
 
       const thisCartProduct = this;
-      let dataFromCartProduct = {};
+
+      let newVar = {};
+
+      let dataFromCartProduct = {
+        id: thisCartProduct.id,
+        amount: thisCartProduct.amount,
+        price: thisCartProduct.price,
+        priceSingle: thisCartProduct.priceSingle,
+        params: {},
+      };
+
       const object = thisCartProduct.params;
-      // console.log(object);
+
       for (const key in object) {
+
         if (object.hasOwnProperty(key)) {
           const element = object[key];
-          // console.log('key', key);
-          // console.log('object[key]', element);
+          console.log('element', element);
 
-          for (const option in element) {
-            if (element.hasOwnProperty(option)) {
-              const newVar = element[option];
-              console.log(newVar);
-              // console.log('option', option);
+          newVar[key] = [];
+          
+          for (const option in element.options) {
+            const singleOption = element.options[option];
+            console.log(singleOption);
 
-
-              console.log(number);
-              dataFromCartProduct = {
-                id: thisCartProduct.id,
-                amount: thisCartProduct.amount,
-                price: thisCartProduct.price,
-                priceSingle: thisCartProduct.priceSingle,
-                params: {},
-              };
-
-
-              // function return object
-              dataFromCartProduct.params = newVar;
-            }
-            
-            number++;
+            newVar[key].push(singleOption);
           }
-          //3
         }
-
       }
-
+      // after loops
+      dataFromCartProduct.params = newVar;
+      // function return object
       return dataFromCartProduct;
     }
   }

@@ -323,21 +323,16 @@
       }
 
       thisProduct.select = thisProduct.element.querySelector('li select option');
-      // for (const select of thisProduct.select) {
-      console.log(thisProduct.select);
-      // select.selectedOption.selectedIndex = 0;
-      // }
-      // thisProduct.data.select.selectedOption.selectedIndex = 0;
       const numberOfMeals = thisProduct.amountWidgetElem.querySelector(select.widgets.amount.input);
       numberOfMeals.value = 1;
-      console.log(thisProduct.formInputs);
-      console.log(thisProduct.data);
-
+     
       //   this way the pictures in pizza refresh as well without one line of code
       thisProduct.processOrder();
       thisProduct.priceElem.textContent = thisProduct.data.price;
       thisProduct.price = thisProduct.data.price;
       thisProduct.initAmountWidget();
+
+
     }
   }
 
@@ -364,7 +359,6 @@
 
       const newValue = parseInt(value);
       // Add validation
-      console.log(newValue);
       if (newValue != thisWidget.value && newValue >= settings.amountWidget.defaultMin && newValue <= settings.amountWidget.defaultMax) {
         thisWidget.value = newValue;
         thisWidget.announce();
@@ -421,7 +415,7 @@
       thisCart.getElements(element);
       thisCart.initActions();
       // thisCart.update();
-    
+
     }
 
     getElements(element) {
@@ -434,7 +428,7 @@
       thisCart.dom.form = thisCart.dom.wrapper.querySelector(select.cart.form);
 
       thisCart.dom.inputPhone = thisCart.dom.wrapper.querySelector(select.cart.phone);
-
+      //  console.log(thisCart.dom.inputPhone);
       thisCart.dom.inputAddress = thisCart.dom.wrapper.querySelector(select.cart.address);
 
       thisCart.dom.toggleTrigger = thisCart.dom.wrapper.querySelector(select.cart.toggleTrigger);
@@ -461,48 +455,59 @@
       });
       thisCart.dom.form.addEventListener('submit', function (e) {
         e.preventDefault();
-        // console.log('thisCart.products', thisCart.products);
-        // console.log('thisCart.products.lenght', Object.keys(thisCart.products).length);
-        // console.log(thisCart.products);
-
 
         // taking lenght of object!
         if (!Object.keys(thisCart.products).length) {
           return;
+          //simple valiacion of length of inputs
         } else {
-          if (thisCart.dom.inputPhone.value == '' || thisCart.dom.inputAddress.value == '') {
-            // console.log(e.current.value);
+          if (Object.keys(thisCart.dom.inputPhone.value).length < 9) {
+
             thisCart.dom.inputPhone.classList.add('error');
-            thisCart.dom.inputAddress.classList.add('error');
             return;
 
+          } else if (Object.keys(thisCart.dom.inputAddress.value).length < 8) {
+            thisCart.dom.inputAddress.classList.add('error');
+            return;
           }
-
-          // if (thisCart.dom.inputAddress.value == '') {
-          //   console.log(e.current.value);
-          //   thisCart.dom.inputAddress.classList.add('error');
-          //   return;
-
-          // }
           thisCart.dom.inputPhone.classList.remove('error');
           thisCart.dom.inputAddress.classList.remove('error');
-
           thisCart.sendOrder();
           thisCart.dom.wrapper.classList.toggle(classNames.cart.wrapperActive);
-          // console.log(thisCart.dom.inputPhone.value);
-          // console.log(thisCart.dom.inputAddress.value);
-
-
         }
 
       });
-      thisCart.dom.inputPhone.addEventListener('change', function (e) {
+      // event input to check current value of input
+      thisCart.dom.inputPhone.addEventListener('input', function (e) {
         e.preventDefault();
-        let data = e.target.value.lenght;
-        console.log(data);
 
+        let mobile = thisCart.dom.inputPhone.value;
+
+
+        thisCart.dom.inputPhone.classList.remove('error');
+
+        thisCart.dom.inputPhone.classList.remove('error');
+        if (mobile.length < 9) {
+       
+          thisCart.dom.inputPhone.classList.add('error');
+
+          return;
+        }
       });
+      // event input to check current value of input
+      thisCart.dom.inputAddress.addEventListener('input', function (e) {
+        e.preventDefault();
+     
+        thisCart.dom.inputAddress.classList.remove('error');
+        let adress = thisCart.dom.inputAddress.value;
 
+        if (adress.length < 8) {
+
+          thisCart.dom.inputAddress.classList.add('error');
+
+          return;
+        }
+      });
     }
 
     sendOrder() {
@@ -523,7 +528,7 @@
       for (const prod of thisCart.products) {
         // let result = prod.getData();
         payload.products.push(prod.getData());
-        console.log('payload.products', payload.products);
+      
       }
 
       const options = {
@@ -550,7 +555,6 @@
     }
 
     add(menuProduct) {
-      console.log(menuProduct.data.params);
       const thisCart = this;
       //creating HTML
       const generatedHTML = templates.cartProduct(menuProduct);
@@ -560,23 +564,7 @@
       thisCart.dom.productList.appendChild(thisCart.element);
 
       thisCart.products.push(new CartProduct(menuProduct, thisCart.element));
-      console.log('thisCart.products', thisCart.products);
-      console.log(thisCart.products);
-      // thisCart.CartProduct = new CartProduct(menuProduct, thisCart.element);
       thisCart.update();
-      console.log(thisCart.products.lenght);
-      let activeProduct = document.querySelector('#product-list > .product.active h3').textContent;
-
-      // activeProduct.remove();
-      // new Product(thisApp.data.products[productData].id, thisApp.data.products[productData])
-      // console.log(app.data.product.id);
-      // console.log(thisProduct.data);
-      // for (const prod of app.data.products) {
-      //   console.log(prod.name);
-      //   if (activeProduct === prod.name) {
-      console.log(activeProduct.data);
-      //   }
-      // }
     }
 
     update() {
@@ -584,16 +572,21 @@
       //reset price of delivery if there is no items in basket
       // thisCart.products.length == 0 ? thisCart.deliveryFee = 0 : thisCart.deliveryFee = 20;
       thisCart.deliveryFee = thisCart.products.length == 0 ? 0 : 20;
-
       thisCart.totalNumber = 0;
       thisCart.subtotalPrice = 0;
+
+      // effect of loading cart
+      thisCart.dom.form.classList.add('change');
+      setTimeout(() => {
+        thisCart.dom.form.classList.remove('change');
+      }, 200);
+
 
       for (const prod of thisCart.products) {
         thisCart.subtotalPrice = thisCart.subtotalPrice + prod.price;
         thisCart.totalNumber = thisCart.totalNumber + prod.amount;
       }
       thisCart.totalPrice = thisCart.subtotalPrice + thisCart.deliveryFee;
-      console.log(thisCart.totalNumber, thisCart.subtotalPrice, thisCart.totalPrice);
 
       for (let key of thisCart.renderTotalsKeys) {
         for (let elem of thisCart.dom[key]) {
@@ -609,10 +602,11 @@
       cartProduct.dom.wrapper.remove();
       thisCart.update();
       // if cart is empty then reset additional styles
-      if (!thisCart.products)
+      if (!Object.keys(thisCart.products).length) {
         thisCart.dom.inputPhone.classList.remove('error');
-      thisCart.dom.inputAddress.classList.remove('error');
-      thisCart.dom.wrapper.classList.toggle(classNames.cart.wrapperActive);
+        thisCart.dom.inputAddress.classList.remove('error');
+        thisCart.dom.wrapper.classList.toggle(classNames.cart.wrapperActive);
+      }
     }
     //clearing cart after submiting order
     clearBasket(cartProduct) {
@@ -620,6 +614,10 @@
       thisCart.products = [];
       cartProduct.dom.wrapper.remove();
       thisCart.update();
+      thisCart.dom.inputPhone = thisCart.dom.wrapper.querySelector(select.cart.phone);
+      thisCart.dom.inputPhone.value = null;
+      thisCart.dom.inputAddress = thisCart.dom.wrapper.querySelector(select.cart.address);
+      thisCart.dom.inputAddress.value = null;
     }
 
   }
@@ -684,12 +682,10 @@
       thisCartProduct.dom.edit.addEventListener('click', function (e) {
         e.preventDefault();
         thisCartProduct.remove();
-        console.log('jest');
       });
       thisCartProduct.dom.remove.addEventListener('click', function (e) {
         e.preventDefault();
         thisCartProduct.remove();
-        console.log('jest');
       });
     }
 
@@ -729,12 +725,10 @@
           return rawResponse.json();
         })
         .then(function (parsedResponse) {
-          console.log('parsedResponse', parsedResponse);
           thisApp.data.products = parsedResponse;
           thisApp.initMenu();
         });
 
-      console.log('thisApp.data', JSON.stringify(thisApp));
     },
 
     init: function () {

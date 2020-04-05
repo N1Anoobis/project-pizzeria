@@ -137,30 +137,88 @@
       thisProduct.amountWidgetElem = thisProduct.element.querySelector(select.menuProduct.amountWidget);
 
     }
-    customEventListiner(cartProduct) {
+    customEventListiner() {
+      // console.log(event);
       const thisProduct = this;
-      document.addEventListener('edit', () => {
-        console.log(cartProduct);
-        thisProduct.edit();
+      document.addEventListener('edit', (event) => {
+        // console.log(thisProduct.id);
+        // console.log(event.detail.cartProduct.id);
+        if (event.detail.cartProduct.id == thisProduct.id) {
+          thisProduct.edit(event.detail.cartProduct);
+        }
       });
 
     }
 
-    edit() {
-      console.log(app.cart);
-      // for (const key in app.cart) {
-      //   if (app.cart.hasOwnProperty(key)) {
-      //     const param = app.cart[key];
-      //     for (const item in param) {
-      //       if (param.hasOwnProperty(item)) {
-      //         const esingle = param[key];
-      //         console.log(esingle);
-      //       }
-      //     }
-      //     console.log(param);
+    edit(recived) {
+      const thisProduct = this;
+      console.log('event passed', recived.params);
+      console.log('current objec state', thisProduct.formInputs);
+
+
+      for (const param in recived.params) {
+        if (recived.params.hasOwnProperty(param)) {
+          const element = recived.params[param];
+
+
+
+          for (const key in element.options) {
+            if (element.options.hasOwnProperty(key)) {
+              const single = element.options[key];
+              console.log('simple element', single.toLowerCase());
+
+              for (const input of thisProduct.formInputs) {
+                // console.log(thisProduct.formInputs);
+                input.checked = false;
+                console.log(input.value.toLowerCase(), single.toLowerCase());
+                if (input.value.toLowerCase() == single.toLowerCase()) {
+                  // czemu to nie dziala   
+                  input.checked = true;
+                }
+              }
+            }
+          }
+        }
+      }
+
+
+
+
+
+
+
+
+
+
+
+      // for (const input of thisProduct.formInputs) {
+      //   // console.log(thisProduct.formInputs);
+      //   input.checked = false;
+
+      //   if (input.defaultChecked) {
+      //     input.checked = true;
+      //   }
+
+      //   if (input.options) {
+      //     input.options.selectedIndex = 0;
       //   }
       // }
+
+      // thisProduct.select = thisProduct.element.querySelector('li select option');
+      // const numberOfMeals = thisProduct.amountWidgetElem.querySelector(select.widgets.amount.input);
+      // numberOfMeals.value = 1;
+
+      // //   this way the pictures in pizza refresh as well without one line of code
+      // thisProduct.processOrder();
+      // thisProduct.priceElem.textContent = thisProduct.data.price;
+      // thisProduct.price = thisProduct.data.price;
+      // thisProduct.initAmountWidget();
     }
+
+
+
+
+
     // version with no if
     // initAccordion() {
     //   const thisProduct = this;
@@ -332,7 +390,7 @@
 
 
       app.cart.add(thisProduct);
-      console.log('data of order allready in class prouct', app.cart);
+      // console.log('data of order allready in class prouct', app.cart);
       // reseting prouct to default after adding to cart
       for (const input of thisProduct.formInputs) {
 
@@ -480,7 +538,7 @@
       });
       // custom event attempt
       thisCart.dom.productList.addEventListener('edit', function () {
-        // thisCart.edit(event.detail.cartProduct);
+        thisCart.remove(event.detail.cartProduct);
         return (event.detail.cartProduct);
       });
       thisCart.dom.form.addEventListener('submit', function (e) {

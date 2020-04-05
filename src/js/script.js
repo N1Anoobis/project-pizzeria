@@ -102,6 +102,7 @@
       thisProduct.initOrderForm();
       thisProduct.initAmountWidget();
       thisProduct.processOrder();
+      thisProduct.customEventListiner();
       // console.log('new Product:', thisProduct);
     }
     renderInMenu() {
@@ -136,7 +137,30 @@
       thisProduct.amountWidgetElem = thisProduct.element.querySelector(select.menuProduct.amountWidget);
 
     }
+    customEventListiner(cartProduct) {
+      const thisProduct = this;
+      document.addEventListener('edit', () => {
+        console.log(cartProduct);
+        thisProduct.edit();
+      });
 
+    }
+
+    edit() {
+      console.log(app.cart);
+      // for (const key in app.cart) {
+      //   if (app.cart.hasOwnProperty(key)) {
+      //     const param = app.cart[key];
+      //     for (const item in param) {
+      //       if (param.hasOwnProperty(item)) {
+      //         const esingle = param[key];
+      //         console.log(esingle);
+      //       }
+      //     }
+      //     console.log(param);
+      //   }
+      // }
+    }
     // version with no if
     // initAccordion() {
     //   const thisProduct = this;
@@ -308,7 +332,7 @@
 
 
       app.cart.add(thisProduct);
-
+      console.log('data of order allready in class prouct', app.cart);
       // reseting prouct to default after adding to cart
       for (const input of thisProduct.formInputs) {
 
@@ -615,9 +639,23 @@
       }
     }
 
-    // edit(cartProduct) {
-    //   console.log(cartProduct);
-    // }
+    edit(thisProduct) {
+      const thisCart = this;
+      console.log(app.cart);
+      // setTimeout(() => {
+      thisCart.remove(thisProduct);
+      // }, 1000);
+
+      ///////////////////////////////////////
+
+      // return thisProduct;
+
+
+      // const score = Function.prototype.bind(Product.testMethod);
+
+
+      // console.log(score);
+    }
 
     //clearing cart after submiting order
     clearBasket(cartProduct) {
@@ -736,7 +774,7 @@
           console.log('element', element);
 
           newVar[key] = [];
-          
+
           for (const option in element.options) {
             const singleOption = element.options[option];
             console.log(singleOption);

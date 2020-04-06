@@ -152,10 +152,10 @@
 
     edit(recived) {
       const thisProduct = this;
-      console.log('event passed', recived.params);
-      console.log('current objec state', thisProduct.formInputs);
+      console.log('event passed', recived);
 
 
+      const checkedInputs = [];
       for (const param in recived.params) {
         if (recived.params.hasOwnProperty(param)) {
           const element = recived.params[param];
@@ -163,26 +163,47 @@
 
 
           for (const key in element.options) {
+            console.log('key', key);
             if (element.options.hasOwnProperty(key)) {
-              const single = element.options[key];
-              console.log('simple element', single.toLowerCase());
+              const single = key;
+              // console.log('simple element', single.toLowerCase());
 
               for (const input of thisProduct.formInputs) {
                 // console.log(thisProduct.formInputs);
+                // console.log('input', input);
                 input.checked = false;
-                console.log(input.value.toLowerCase(), single.toLowerCase());
+
+                // console.log(input.value.toLowerCase(), single.toLowerCase());
                 if (input.value.toLowerCase() == single.toLowerCase()) {
-                  // czemu to nie dziala   
+
                   input.checked = true;
+                  // push correct inputs in to array
+                  checkedInputs.push(input);
+
+
                 }
+                // if (input.options) {
+
+                // }
               }
             }
           }
+          // console.log(input.options.selectedIndex);
         }
       }
+      console.log('current objec state', thisProduct.formInputs);
+      //secend set of loops to handle proper display of results
+      for (const input of thisProduct.formInputs) {
 
+        for (const item of checkedInputs) {
 
+          if (input.value.toLowerCase() == item.value.toLowerCase()) {
 
+            input.checked = true;
+          }
+
+        }
+      }
 
 
 
@@ -209,10 +230,12 @@
       // numberOfMeals.value = 1;
 
       // //   this way the pictures in pizza refresh as well without one line of code
-      // thisProduct.processOrder();
-      // thisProduct.priceElem.textContent = thisProduct.data.price;
+      thisProduct.processOrder();
+      thisProduct.priceElem.textContent = recived.price;
       // thisProduct.price = thisProduct.data.price;
-      // thisProduct.initAmountWidget();
+
+      thisProduct.amountWidgetElem.querySelector('input').value = recived.amount;
+
     }
 
 

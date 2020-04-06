@@ -158,12 +158,12 @@
           for (const key in element.options) {
             console.log('key', key);
             if (element.options.hasOwnProperty(key)) {
-              const single = key;
+              // const single = key;
 
               for (const input of thisProduct.formInputs) {
                 input.checked = false;
 
-                if (input.value.toLowerCase() == single.toLowerCase()) {
+                if (input.value.toLowerCase() == key.toLowerCase()) {
 
                   input.checked = true;
                   // push correct inputs in to array
@@ -172,7 +172,8 @@
                 }
                 // restorethe value of select
                 if (input.options) {
-                  document.querySelector('select').value = key;
+                  input.value = key;
+                 
                 }
               }
             }

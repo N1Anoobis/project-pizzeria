@@ -123,72 +123,61 @@
       const thisProduct = this;
 
       thisProduct.accordionTrigger = thisProduct.element.querySelector(select.menuProduct.clickable);
-      // console.log(thisProduct.accordionTrigger);
+
       thisProduct.form = thisProduct.element.querySelector(select.menuProduct.form);
-      // console.log(thisProduct);
+
       thisProduct.formInputs = thisProduct.form.querySelectorAll(select.all.formInputs);
 
       thisProduct.cartButton = thisProduct.element.querySelector(select.menuProduct.cartButton);
-      // console.log(thisProduct.cartButton);
+
       thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
-      // console.log(thisProduct.priceElem );
+
       thisProduct.imageWrapper = thisProduct.element.querySelector(select.menuProduct.imageWrapper);
-      // console.log(thisProduct.imageWrapper);
+
       thisProduct.amountWidgetElem = thisProduct.element.querySelector(select.menuProduct.amountWidget);
 
     }
     customEventListiner() {
-      // console.log(event);
       const thisProduct = this;
       document.addEventListener('edit', (event) => {
-        // console.log(thisProduct.id);
-        // console.log(event.detail.cartProduct.id);
         if (event.detail.cartProduct.id == thisProduct.id) {
           thisProduct.edit(event.detail.cartProduct);
         }
       });
-
     }
 
     edit(recived) {
       const thisProduct = this;
       console.log('event passed', recived);
 
-
       const checkedInputs = [];
       for (const param in recived.params) {
         if (recived.params.hasOwnProperty(param)) {
           const element = recived.params[param];
 
-
-
           for (const key in element.options) {
             console.log('key', key);
             if (element.options.hasOwnProperty(key)) {
               const single = key;
-              // console.log('simple element', single.toLowerCase());
 
               for (const input of thisProduct.formInputs) {
-                // console.log(thisProduct.formInputs);
-                // console.log('input', input);
                 input.checked = false;
 
-                // console.log(input.value.toLowerCase(), single.toLowerCase());
                 if (input.value.toLowerCase() == single.toLowerCase()) {
 
                   input.checked = true;
                   // push correct inputs in to array
                   checkedInputs.push(input);
 
-
                 }
-                // if (input.options) {
-
-                // }
+                // restorethe value of select
+                if (input.options) {
+                  document.querySelector('select').value = key;
+                }
               }
             }
           }
-          // console.log(input.options.selectedIndex);
+          console.log(checkedInputs);
         }
       }
       console.log('current objec state', thisProduct.formInputs);
@@ -205,42 +194,11 @@
         }
       }
 
-
-
-
-
-
-
-
-      // for (const input of thisProduct.formInputs) {
-      //   // console.log(thisProduct.formInputs);
-      //   input.checked = false;
-
-      //   if (input.defaultChecked) {
-      //     input.checked = true;
-      //   }
-
-      //   if (input.options) {
-      //     input.options.selectedIndex = 0;
-      //   }
-      // }
-
-      // thisProduct.select = thisProduct.element.querySelector('li select option');
-      // const numberOfMeals = thisProduct.amountWidgetElem.querySelector(select.widgets.amount.input);
-      // numberOfMeals.value = 1;
-
-      // //   this way the pictures in pizza refresh as well without one line of code
+      // //   this way the pictures in pizza refresh
       thisProduct.processOrder();
       thisProduct.priceElem.textContent = recived.price;
-      // thisProduct.price = thisProduct.data.price;
-
       thisProduct.amountWidgetElem.querySelector('input').value = recived.amount;
-
     }
-
-
-
-
 
     // version with no if
     // initAccordion() {
@@ -380,7 +338,6 @@
                 for (const allI of allIMG) {
                   allI.classList.remove(classNames.menuProduct.imageVisible);
                 }
-
               }
               //two last lines removed from here because double loop caused wrong price value
             }

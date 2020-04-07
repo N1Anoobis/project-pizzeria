@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Pizzeria</title>
-  <link href="https://fonts.googleapis.com/css?family=Lato:400,300i,700%7COswald:300,500,700&amp;subset=latin-ext" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Lato:400,300i,700%7COswald:300,500,700&amp;subset=latin-ext"
+    rel="stylesheet">
   <link href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
 
   <header class="header">
@@ -55,10 +58,10 @@
     </div>
   </header>
 
-    <div id="product-list" class="product-list container"></div>
+  <div id="product-list" class="product-list container"></div>
 
-    <script id="template-cart-product" type="text/x-handlebars-template">
-      <li>
+  <script id="template-cart-product" type="text/x-handlebars-template">
+    <li>
         <div class="widget-amount"> <!-- widget-amount -->
           <a class="btn-quantity btn-quantity--lt" href="#less"><i class="fas fa-minus"></i></a>
           <input class="amount" type="text" value="{{ amount }}">
@@ -85,8 +88,8 @@
       </li>
     </script>
 
-    <script id="template-menu-product" type="text/x-handlebars-template">
-      <article class="product"> <!-- product -->
+  <script id="template-menu-product" type="text/x-handlebars-template">
+    <article class="product"> <!-- product -->
 
           <header class="product__header">
             <h3 class="product__name no-spacing">{{ name }} <i class="fas fa-chevron-down product__icon"></i></h3>
@@ -165,8 +168,7 @@
     </script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.0/handlebars.min.js"></script>
-  <script src="js/functions.js"></script>
-  <script src="js/data.js"></script>
-  <script src="js/script.js"></script>
+  <script src="js/app.js" type="module"></script>
 </body>
+
 </html>

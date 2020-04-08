@@ -12,7 +12,6 @@ class Cart {
     thisCart.getElements(element);
     thisCart.initActions();
     // thisCart.update();
-
   }
 
   getElements(element) {
@@ -229,7 +228,6 @@ class Cart {
     // thisCart.dom.inputAddress = thisCart.dom.wrapper.querySelector(select.cart.address);
     thisCart.dom.inputAddress.value = null;
   }
-
 }
 
 export default Cart;

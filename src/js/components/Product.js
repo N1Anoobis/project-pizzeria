@@ -50,7 +50,6 @@ class Product {
     thisProduct.imageWrapper = thisProduct.element.querySelector(select.menuProduct.imageWrapper);
 
     thisProduct.amountWidgetElem = thisProduct.element.querySelector(select.menuProduct.amountWidget);
-
   }
   customEventListiner() {
     const thisProduct = this;
@@ -183,7 +182,6 @@ class Product {
       event.preventDefault();
       thisProduct.processOrder();
       thisProduct.addToCart();
-
     });
   }
 
@@ -320,8 +318,6 @@ class Product {
     thisProduct.priceElem.textContent = thisProduct.data.price;
     thisProduct.price = thisProduct.data.price;
     thisProduct.initAmountWidget();
-
-
   }
 }
 

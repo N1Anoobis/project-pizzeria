@@ -37,7 +37,6 @@ class HourPicker extends BaseWidget {
   }
 
   isValid() {
- 
     return true;
   }
 

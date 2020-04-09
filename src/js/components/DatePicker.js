@@ -39,22 +39,16 @@ class DatePicker extends BaseWidget {
       },
       onChange: function (dateStr) {
 
-        dateStr = thisWidget.dom.input.value;
-
-        console.log('thisWidget.value =', dateStr);
-        console.log(thisWidget.value);
+        thisWidget.value = dateStr;
       },
     });
   }
 
-  parseValue() {
-    const thisWidget = this;
-
-    return thisWidget.value;
+  parseValue(value) {
+    return value;
   }
 
   isValid() {
-    // const thisWidget = this;
     return true;
   }
 }

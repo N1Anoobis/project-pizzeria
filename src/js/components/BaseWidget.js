@@ -31,7 +31,7 @@ class BaseWidget {
 
     thisWidget.value = value;
   }
-  
+
   parseValue(value) {
     return parseInt(value);
   }
@@ -42,8 +42,9 @@ class BaseWidget {
 
   renderValue() {
     const thisWidget = this;
-
+    // in materials this line is used !
     thisWidget.dom.wrapper.innerHTML = thisWidget.value;
+    // thisWidget.dom.input = thisWidget.value;
   }
 
   announce() {

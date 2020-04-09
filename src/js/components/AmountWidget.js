@@ -12,6 +12,7 @@ class AmountWidget extends BaseWidget {
     // thisWidget.value = settings.amountWidget.defaultValue;
     // thisWidget.setValue(thisWidget.input.value);
     thisWidget.initActions();
+    // console.log('thisWidget',thisWidget);
   }
 
   getElements() {
@@ -29,7 +30,7 @@ class AmountWidget extends BaseWidget {
       value <= settings.amountWidget.defaultMax;
   }
 
-  renderValue(){
+  renderValue() {
     const thisWidget = this;
 
     thisWidget.dom.input.value = thisWidget.value;
@@ -39,7 +40,8 @@ class AmountWidget extends BaseWidget {
     const thisWidget = this;
 
     thisWidget.dom.input.addEventListener('change', function () {
-      thisWidget.setValue(thisWidget.input.value);
+      // thisWidget.setValue(thisWidget.input.value);
+      thisWidget.value = thisWidget.dom.input.value;
     });
     thisWidget.dom.linkDecrease.addEventListener('click', function (e) {
       e.preventDefault();

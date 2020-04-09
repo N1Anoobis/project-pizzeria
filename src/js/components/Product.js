@@ -86,7 +86,6 @@ class Product {
               // restore the value of select
               if (input.options) {
                 input.value = key;
-
               }
             }
           }

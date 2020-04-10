@@ -19,6 +19,7 @@ class Booking {
 
     //generate HTML based on templated
     const generatedHTML = templates.bookingWidget();
+    // console.log( generatedHTML);
     //create elements using utils.createDOMFromHTML
     thisBooking.element = utils.createDOMFromHTML(generatedHTML);
     //find menu container

@@ -5,6 +5,7 @@ export const select = {
     menuProduct: '#template-menu-product',
     cartProduct: '#template-cart-product',
     bookingWidget: '#template-booking-widget',
+    floorPlan: '#template-floor-plan',
   },
   containerOf: {
     menu: '#product-list',
@@ -114,6 +115,7 @@ export const settings = {
     order: 'order',
     booking: 'booking',
     event: 'event',
+    tables: 'tables',
     dateStartParamKey: 'date_gte',
     dateEndParamKey: 'date_lte',
     notRepeatParam: 'repeat=false',

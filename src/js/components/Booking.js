@@ -8,18 +8,18 @@ import DatePicker from './DatePicker.js';
 import HourPicker from './HourPicker.js';
 
 class Booking {
-  constructor(element) {
+  constructor(element, tables) {
     const thisBooking = this;
-    thisBooking.render(element);
+    thisBooking.render(element,tables);
     thisBooking.initWidgets();
+   
   }
 
-  render() {
+  render(element, tables) {
     const thisBooking = this;
 
     //generate HTML based on templated
-    const generatedHTML = templates.bookingWidget();
-    // console.log( generatedHTML);
+    const generatedHTML = templates.bookingWidget(tables);
     //create elements using utils.createDOMFromHTML
     thisBooking.element = utils.createDOMFromHTML(generatedHTML);
     //find menu container

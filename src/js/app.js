@@ -1,4 +1,4 @@
-/* global Handlebars */ // eslint-disable-line no unused-vars
+// /* global Handlebars */ // eslint-disable-line no unused-vars
 import {
   settings,
   select,
@@ -51,10 +51,11 @@ const app = {
     }
   },
 
-  initBooking: function () {
+  initBooking: function (tables) {
     const thisApp = this;
+    console.log(tables);
     const bookingContener = document.querySelector(select.containerOf.booking);
-    thisApp.booking = new Booking(bookingContener);
+    thisApp.booking = new Booking(bookingContener, tables);
   },
 
   initMenu: function () {
@@ -77,6 +78,7 @@ const app = {
   initData: function () {
     const thisApp = this;
     thisApp.data = {};
+    let tables = {};
     const url = settings.db.url + '/' + settings.db.product;
     fetch(url)
       .then(function (rawResponse) {
@@ -87,27 +89,22 @@ const app = {
         thisApp.data.products = parsedResponse;
         thisApp.initMenu();
       });
-    /// for tables 
+    // /for tables 
     thisApp.tables = {};
     const urlTables = settings.db.url + '/' + settings.db.tables;
     fetch(urlTables)
       .then(function (rawResponse) {
         return rawResponse.json();
-
       })
       .then(function (parsedResponse) {
         thisApp.data.tables = parsedResponse;
 
-        const tplTableList = Handlebars.compile(document.querySelector(select.templateOf.floorPlan).innerHTML);
-       
-        const generatedHTML = tplTableList(thisApp.data.tables);
-        console.log(generatedHTMLthisApp.data.tables);
-        const target = document.querySelector('.floor-plan');
-        console.log(target);
-        target.insertAdjacentHTML('beforeend', generatedHTML);
-      });
-    console.log(thisApp.data);
+        tables = {
+          tables: thisApp.data.tables,
+        };
 
+        thisApp.initBooking(tables);
+      });
   },
 
   init: function () {
@@ -116,7 +113,7 @@ const app = {
     thisApp.initPages();
     thisApp.initData();
     thisApp.initCart();
-    thisApp.initBooking();
+    // thisApp.initBooking();
   },
 };
 

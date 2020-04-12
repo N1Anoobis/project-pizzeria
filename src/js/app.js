@@ -53,7 +53,7 @@ const app = {
 
   initBooking: function (tables) {
     const thisApp = this;
-    console.log(tables);
+    // console.log(tables);
     const bookingContener = document.querySelector(select.containerOf.booking);
     thisApp.booking = new Booking(bookingContener, tables);
   },

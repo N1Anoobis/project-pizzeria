@@ -166,8 +166,8 @@
         content: '';
         width: 100%;
         height: 100%;
-        left: 0;
-        top: 0;
+        // left: 0;
+        // top: 0;
         background: $color-dark;
         opacity: 0.4;
       }
@@ -175,23 +175,23 @@
     }
   }
 
-  [data-table="1"] {
-    left: 40px;
-    top: 40px;
-  }
+  // [data-table="1"] {
+  //   left: 40px;
+  //   top: 40px;
+  // }
 
   [data-table="2"] {
-    right: 25px;
-    top: 25px;
+    // right: 25px;
+    // top: 25px;
     width: 100px;
     height: 100px;
     line-height: 100px;
   }
 
-  [data-table="3"] {
-    right: 40px;
-    top: 180px;
-  }
+  // [data-table="3"] {
+  //   right: 40px;
+  //   top: 180px;
+  // }
 }
 
 .booking-options {

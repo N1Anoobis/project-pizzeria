@@ -270,30 +270,23 @@
   ],
   "booking": [],
 "tables": [
-    { "id":"entry",
-      "class": "object entry",
-      "data-table": "",
-      "style": " bottom: -24px; left: 50%; width: 100px; height: 18px; line-height: 17px; transform: translate(-50%, -50%); box-shadow: none; background: #ede3c8; border: 1px solid black; border-width: 0 6px 0 6px;"
-    },
-    {"id":"bar",
-      "class": "object bar",
-      "data-table": "",
-      "style": " left: 0; bottom: 50px; width: 100px; height: 50px; line-height: 50px;"
-    },
     {"id":"table-1", 
       "class": "object table",
       "data-table": "1",
-      "style": "left: 40px; top: 40px;"
+      "style": "left: 40px; top: 40px;",
+      "type": "rectangle"
     },
     {"id":"table-2", 
       "class": "object table table--round",
       "data-table": "2",
-      "style": "right: 25px; top: 25px; width: 100px; height: 100px; line-height: 100px;"
+      "style": "right: 25px; top: 25px;",
+      "type": "round"	
     },
     {"id":"table-3", 
       "class": "object table",
       "data-table": "3",
-      "style": " right: 40px; top: 180px;"
+      "style": " right: 40px; top: 180px;",
+      "type": "rectangle"
     }
   ]
 }

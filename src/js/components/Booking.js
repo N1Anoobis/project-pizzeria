@@ -31,8 +31,11 @@ class Booking {
     thisBooking.dom = {};
     thisBooking.dom.wrapper = bookingWrapper;
     thisBooking.dom.peopleAmount = document.querySelector(select.booking.peopleAmount);
+    // console.log(thisBooking.dom.peopleAmount);
+    thisBooking.dom.peopleDecrese = thisBooking.dom.peopleAmount.querySelector('[href="#less"]');
+    thisBooking.dom.peopleIncrese = thisBooking.dom.peopleAmount.querySelector('[href="#more"]');
 
-
+    // console.log(thisBooking.dom.peopleDecrese);
 
     thisBooking.dom.hoursAmount = document.querySelector(select.booking.hoursAmount);
     thisBooking.dom.dataPicker = bookingWrapper.querySelector(select.widgets.datePicker.wrapper);
@@ -46,44 +49,59 @@ class Booking {
 
   dinamicPeopleOrder() {
     const thisBooking = this;
-    ///listiner to take current value of people wiget
+    /// current value of people wiget
     let input = thisBooking.dom.peopleAmount.querySelector('input');
+    console.log(input.value);
+    //number of inputs currently displayed
+    const numberOfInputs = document.querySelector('.input-name');
 
-    thisBooking.dom.peopleAmount.addEventListener('click', function () {
-      //remove all inputs
-      const remove = document.querySelector('.input-name').querySelectorAll('input');
-      for (const elem of remove) {
-        elem.parentNode.removeChild(elem);
-      }
-      // display correct number of inputs
-      for (let index = 0; index < input.value; index++) {
-        let inputName = document.createElement('input');
-        thisBooking.dom.inputName.appendChild(inputName);
+    //removing guest input
+    thisBooking.dom.peopleDecrese.addEventListener('click', function () {
+      if (numberOfInputs.childElementCount > 1) {
+        numberOfInputs.lastElementChild.remove();
+      } else {
+        return;
       }
     });
+
+    //adding guest input
+    thisBooking.dom.peopleIncrese.addEventListener('click', function () {
+      if (numberOfInputs.childElementCount < 9) {
+        let inputName = document.createElement('input');
+        inputName.setAttribute('type', 'text');
+        inputName.setAttribute('name', 'guest');
+        inputName.setAttribute('value', '');
+        thisBooking.dom.inputName.appendChild(inputName);
+      } else {
+        return;
+      }
+    });
+
     //listiner for submit
     thisBooking.dom.bookingForm.addEventListener('submit', function (e) {
       e.preventDefault();
       thisBooking.dom.guestsNames = document.querySelector('.input-name').querySelectorAll('input');
-      // event input to check current value of input
-      const checkAllInputs = document.querySelector('.input-name').querySelectorAll('input');
+      // collect all of inputs
+      let [...checkAllInputs] = document.querySelector('.input-name').querySelectorAll('input');
+      console.log(checkAllInputs);
 
-      // simple validation
+      // simple 2 step validation
+      // check if every single input is ok
       for (const checkInput of checkAllInputs) {
-
         let guestName = checkInput.value;
-
-        checkInput.classList.remove('error');
-
-        checkInput.classList.remove('error');
-        if (guestName.length < 5) {
-
+        if (guestName.length > 5) {
+          checkInput.classList.remove('error');
+        } else {
           checkInput.classList.add('error');
+        }
+      }
+      // if all inputs are ok then allow to run
+      for (const checkInput of checkAllInputs) {
+        if (checkInput.classList.contains('error')) {
           return;
         }
       }
-
-
+      //fetch stuff
       const url = settings.db.url + '/' + settings.db.order;
 
       const payload = {
@@ -106,14 +124,18 @@ class Booking {
           console.log('parsedResponse', parsedResponse);
         });
 
-      //clearing input list after submiting order
+      //clearing input list and widget after submiting order
       const remove = document.querySelector('.input-name').querySelectorAll('input');
       for (const elem of remove) {
         elem.parentNode.removeChild(elem);
       }
       let inputName = document.createElement('input');
+      inputName.setAttribute('type', 'text');
+      inputName.setAttribute('name', 'guest');
+      inputName.setAttribute('value', '');
       thisBooking.dom.inputName.appendChild(inputName);
       input.value = 1;
+      thisBooking.initWidgets();
     });
   }
 

@@ -219,7 +219,7 @@
   "order": [],
   "event": [{
       "id": 1,
-      "date": "2019-01-01",
+      "date": "2020-04-15",
       "hour": "12:30",
       "table": 1,
       "repeat": false,
@@ -229,7 +229,7 @@
     },
     {
       "id": 2,
-      "date": "2019-01-01",
+      "date": "2020-04-11",
       "hour": "16:00",
       "table": 3,
       "repeat": "daily",
@@ -239,7 +239,7 @@
     },
     {
       "id": 3,
-      "date": "2019-01-01",
+      "date": "2020-04-11",
       "hour": "12:00",
       "table": 3,
       "repeat": "daily",
@@ -249,7 +249,7 @@
     },
     {
       "id": 4,
-      "date": "2019-01-01",
+      "date": "2020-04-11",
       "hour": "13:00",
       "table": 2,
       "repeat": "daily",
@@ -259,7 +259,7 @@
     },
     {
       "id": 5,
-      "date": "2019-01-01",
+      "date": "2020-04-11",
       "hour": "18:00",
       "table": 2,
       "repeat": "daily",
@@ -268,7 +268,15 @@
       "starters": ["lemonWater"]
     }
   ],
-  "booking": [],
+  "booking": [{
+"id": 1,
+"date": "2020-04-15",
+"hour": "18:00",
+"table": 1,
+"duration": 3,
+"ppl": 4,
+"starters": ["water"]
+}],
 "tables": [
     {"id":"table-1", 
       "class": "object table",

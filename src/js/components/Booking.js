@@ -40,13 +40,11 @@ class Booking {
         dateEndParam,
       ],
     };
-    // console.log('getdata params', params);
     const urls = {
       booking: settings.db.url + '/' + settings.db.booking + '?' + params.booking.join('&'),
       eventCurrent: settings.db.url + '/' + settings.db.event + '?' + params.eventCurrent.join('&'),
       eventsRepeat: settings.db.url + '/' + settings.db.event + '?' + params.eventsRepeat.join('&'),
     };
-    // console.group('getData urls', urls);
     Promise.all([fetch(urls.booking), fetch(urls.eventCurrent), fetch(urls.eventsRepeat), ])
       .then(function (allResponses) {
         const bookingsResponse = allResponses[0];
@@ -59,9 +57,6 @@ class Booking {
         ]);
       })
       .then(function ([bookings, eventCurrent, eventsRepeat]) {
-        // console.log(bookings);
-        // console.log(eventCurrent);
-        // console.log(eventsRepeat);
         thisBooking.parseData(bookings, eventCurrent, eventsRepeat);
       });
   }
@@ -71,42 +66,34 @@ class Booking {
     thisBooking.booked = {};
 
     for (const item of bookings) {
-      // console.log(item)
       thisBooking.makeBooked(item.date, item.hour, item.duration, item.table);
     }
 
     for (const item of eventCurrent) {
-      // console.log(item)
       thisBooking.makeBooked(item.date, item.hour, item.duration, item.table);
     }
 
     const minDate = thisBooking.datePicker.minDate;
     const maxDate = thisBooking.datePicker.maxDate;
-    // console.log(maxDate);
 
     for (const item of eventsRepeat) {
-      // console.log(item)
       if (item.repeat == 'daily') {
         for (let loopData = minDate; loopData <= maxDate; loopData = utils.addDays(loopData, 1)) {
           thisBooking.makeBooked(utils.dateToStr(loopData), item.hour, item.duration, item.table);
         }
       }
     }
-    console.log('thisBooking.booked', thisBooking.booked);
     thisBooking.updateDOM();
   }
 
   makeBooked(date, hour, duration, table) {
     const thisBooking = this;
-    
     if (typeof thisBooking.booked[date] == 'undefined') {
       thisBooking.booked[date] = {};
     }
-    // console.log(hour);
     const startHour = utils.hourToNumber(hour);
 
     for (let hourBlock = startHour; hourBlock < startHour + duration; hourBlock += 0.5) {
-      // console.log(hourBlock)
       if (typeof thisBooking.booked[date][hourBlock] == 'undefined') {
         thisBooking.booked[date][hourBlock] = [];
       }
@@ -119,9 +106,7 @@ class Booking {
     const thisBooking = this;
 
     thisBooking.date = thisBooking.datePicker.value;
-    console.log(thisBooking.datePicker.value);
     thisBooking.hour = utils.hourToNumber(thisBooking.hourPicker.value);
-    console.log(thisBooking.hourPicker.value);
     let allAvailble = false;
 
     if (
@@ -145,7 +130,6 @@ class Booking {
         table.classList.remove(classNames.booking.tableBooked);
       }
     }
-    console.log('thisBooking.booked', thisBooking.booked);
   }
 
   render(element, tables) {
@@ -172,7 +156,6 @@ class Booking {
 
     thisBooking.dom.orderConfirmation = document.querySelector('.order-confirmation');
     thisBooking.dom.floorPlan = document.querySelector('.floor-plan');
-    console.log('thisBooking.dom.floorPlan', thisBooking.dom.floorPlan);
   }
 
   initWidgets() {
@@ -208,10 +191,21 @@ class Booking {
     if (clicked.classList.contains(classNames.booking.tableBooked)) {
       return;
 
-    } else 
-    {
+    } else {
       clicked.classList.add('chosen');
       this.activTable = clicked.dataset.table;
+    }
+    // taking some data needed for payload after succesfull validation
+    for (const table of this.dom.tables) {
+      if (table.classList.contains('chosen')) {
+        for (const key in table.dataset) {
+          if (table.dataset.hasOwnProperty(key)) {
+            const element = table.dataset[key];
+            //parse that value to number
+            this.dom.activeTable = parseInt(element, 10);
+          }
+        }
+      }
     }
   }
 
@@ -220,7 +214,7 @@ class Booking {
     //reset all tables
     for (const table of thisBooking.dom.tables) {
       table.classList.remove('chosen');
-      
+
     }
   }
 
@@ -234,32 +228,52 @@ class Booking {
 
   sendBookingRequest() {
     const thisBooking = this;
-    /// current value of people and hour wiget
-    let peopleInput = thisBooking.dom.peopleAmount.querySelector('input');
-    let hourInput = thisBooking.dom.hoursAmount.querySelector('input');
+    /// current value of people and hour wiget taken using getters 
 
     //listiner for submit
     thisBooking.dom.wrapper.addEventListener('submit', function (e) {
       e.preventDefault();
 
       thisBooking.dom.guestsAddress = thisBooking.dom.orderConfirmation.querySelector('[name="address"]');
-      console.log(thisBooking.dom.guestsAddress.value);
+
       thisBooking.dom.guestsNumber = thisBooking.dom.orderConfirmation.querySelector('[name="phone"]');
 
       // collect all of inputs
       let checkAllInputs = thisBooking.dom.orderConfirmation.querySelectorAll('input');
-      console.log(checkAllInputs);
 
       // simple 2 step validation
-      // check if every single input is ok
+
       for (const checkInput of checkAllInputs) {
-        let guestName = checkInput.value;
-        if (guestName.length > 5) {
-          checkInput.classList.remove('error');
-        } else {
+        if (checkInput.value.length < 8) {
           checkInput.classList.add('error');
-        }
+        } else if (checkInput.value.length < 8)
+          checkInput.classList.add('error');
       }
+
+      thisBooking.dom.guestsAddress.addEventListener('input', function (e) {
+        e.preventDefault();
+
+        let address = thisBooking.dom.guestsAddress.value;
+        thisBooking.dom.guestsAddress.classList.remove('error');
+        if (address.length < 8) {
+
+          thisBooking.dom.guestsAddress.classList.add('error');
+          return;
+        }
+      });
+
+      thisBooking.dom.guestsNumber.addEventListener('input', function (e) {
+        e.preventDefault();
+
+        let phone = thisBooking.dom.guestsNumber.value;
+        thisBooking.dom.guestsNumber.classList.remove('error');
+        if (phone.length < 8) {
+
+          thisBooking.dom.guestsNumber.classList.add('error');
+          return;
+        }
+      });
+
       // if all inputs are ok then allow to run
       for (const checkInput of checkAllInputs) {
         if (checkInput.classList.contains('error')) {
@@ -271,30 +285,19 @@ class Booking {
         thisBooking.dom.floorPlan.style.borderColor = 'red';
         return;
       }
-      // taking some data needed for payload after succesfull validation
-      for (const table of thisBooking.dom.tables) {
-        if (table.classList.contains('chosen')) {
-          for (const key in table.dataset) {
-            if (table.dataset.hasOwnProperty(key)) {
-              const element = table.dataset[key];
-              //parse that value to number
-              thisBooking.dom.activeTable = parseInt(element, 10);
-            }
-          }
-        }
-      }
+
       //fetch stuff
-      const url = settings.db.url + '/' + settings.db.order;
+      const url = settings.db.url + '/' + settings.db.booking;
 
       const payload = {
         address: thisBooking.dom.guestsAddress.value,
         number: thisBooking.dom.guestsNumber.value,
         table: thisBooking.dom.activeTable,
-        hour: thisBooking.hour,
+        hour: utils.numberToHour(thisBooking.hour),
         date: thisBooking.datePicker.value,
-        ppl: peopleInput.value,
+        ppl: thisBooking.peopleAmount.value,
         repeat: false,
-        duration: hourInput.value,
+        duration: thisBooking.hoursAmount.value,
       };
 
       const options = {
@@ -310,14 +313,14 @@ class Booking {
         });
 
       // duration and table has to be passed as numbers
-      thisBooking.makeBooked(thisBooking.datePicker.value, utils.numberToHour(thisBooking.hour), parseInt(hourInput.value, 10), thisBooking.dom.activeTable);
-  
+      thisBooking.makeBooked(thisBooking.datePicker.value, utils.numberToHour(thisBooking.hour), thisBooking.hoursAmount.value, thisBooking.dom.activeTable);
+
       // reset after sending to API
       for (const input of checkAllInputs) {
         input.value = null;
       }
-      peopleInput.value = 1;
-      hourInput.value = 1;
+      thisBooking.peopleAmount.value = 1;
+      thisBooking.hoursAmount.value = 1;
       thisBooking.activeTable = false;
       thisBooking.dom.floorPlan.style.borderColor = 'black';
       thisBooking.initWidgets();

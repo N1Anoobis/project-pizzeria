@@ -113,6 +113,7 @@ class CartProduct {
         }
       }
     }
+    
     // after loops
     dataFromCartProduct.params = newVar;
     // function return object

@@ -12,11 +12,11 @@ import HourPicker from './HourPicker.js';
 class Booking {
   constructor(element, tables) {
     const thisBooking = this;
-    window.switcher = false;
+    // clicked.dataset.table = false;
     thisBooking.render(element, tables);
     thisBooking.initWidgets();
     thisBooking.getData();
-    thisBooking.tableSelection();
+    thisBooking.addListener();
     thisBooking.sendBookingRequest();
   }
 
@@ -98,14 +98,12 @@ class Booking {
 
   makeBooked(date, hour, duration, table) {
     const thisBooking = this;
-
+    
     if (typeof thisBooking.booked[date] == 'undefined') {
       thisBooking.booked[date] = {};
     }
-
+    // console.log(hour);
     const startHour = utils.hourToNumber(hour);
-
-
 
     for (let hourBlock = startHour; hourBlock < startHour + duration; hourBlock += 0.5) {
       // console.log(hourBlock)
@@ -173,7 +171,8 @@ class Booking {
     thisBooking.dom.tables = bookingWrapper.querySelectorAll(select.booking.tables);
 
     thisBooking.dom.orderConfirmation = document.querySelector('.order-confirmation');
-
+    thisBooking.dom.floorPlan = document.querySelector('.floor-plan');
+    console.log('thisBooking.dom.floorPlan', thisBooking.dom.floorPlan);
   }
 
   initWidgets() {
@@ -191,26 +190,28 @@ class Booking {
       thisBooking.updateDOM();
 
       thisBooking.tableSelection();
+
+      thisBooking.activTable = false;
     });
   }
 
   trigger(e) {
+    // const thisBooking = this;
     const clicked = e.target;
 
-
     // clear all marked tables so we can have only one chosen at the time
-    const tables = document.querySelector(select.containerOf.booking).querySelectorAll(select.booking.tables);
-    for (const table of tables) {
+    // because of bind this.dom.tables works
+    for (const table of this.dom.tables) {
       table.classList.remove('chosen');
     }
 
     if (clicked.classList.contains(classNames.booking.tableBooked)) {
       return;
 
-    } else {
-      clicked.classList.toggle('chosen');
-      window.switcher = true;
-
+    } else 
+    {
+      clicked.classList.add('chosen');
+      this.activTable = clicked.dataset.table;
     }
   }
 
@@ -219,8 +220,15 @@ class Booking {
     //reset all tables
     for (const table of thisBooking.dom.tables) {
       table.classList.remove('chosen');
+      
+    }
+  }
+
+  addListener() {
+    const thisBooking = this;
+    for (const table of thisBooking.dom.tables) {
       //event listiner in remote function
-      table.addEventListener('click', thisBooking.trigger);
+      table.addEventListener('click', thisBooking.trigger.bind(thisBooking));
     }
   }
 
@@ -229,7 +237,7 @@ class Booking {
     /// current value of people and hour wiget
     let peopleInput = thisBooking.dom.peopleAmount.querySelector('input');
     let hourInput = thisBooking.dom.hoursAmount.querySelector('input');
-   
+
     //listiner for submit
     thisBooking.dom.wrapper.addEventListener('submit', function (e) {
       e.preventDefault();
@@ -259,7 +267,8 @@ class Booking {
         }
       }
       //check if table marked
-      if (!window.switcher) {
+      if (!thisBooking.activTable) {
+        thisBooking.dom.floorPlan.style.borderColor = 'red';
         return;
       }
       // taking some data needed for payload after succesfull validation
@@ -268,10 +277,8 @@ class Booking {
           for (const key in table.dataset) {
             if (table.dataset.hasOwnProperty(key)) {
               const element = table.dataset[key];
-              // console.log(key);
-              // console.log();
-              // console.log(peopleInput.value, hourInput.value);
-              thisBooking.dom.activeTable = element;
+              //parse that value to number
+              thisBooking.dom.activeTable = parseInt(element, 10);
             }
           }
         }
@@ -283,9 +290,11 @@ class Booking {
         address: thisBooking.dom.guestsAddress.value,
         number: thisBooking.dom.guestsNumber.value,
         table: thisBooking.dom.activeTable,
-        time: thisBooking.hour,
-        numberOfPeople: peopleInput.value,
-        durationOfBooking: hourInput.value,
+        hour: thisBooking.hour,
+        date: thisBooking.datePicker.value,
+        ppl: peopleInput.value,
+        repeat: false,
+        duration: hourInput.value,
       };
 
       const options = {
@@ -298,16 +307,19 @@ class Booking {
       fetch(url, options)
         .then(function (response) {
           console.log('response', response);
-        }).then(function (parsedResponse) {
-          console.log('parsedResponse', parsedResponse);
         });
+
+      // duration and table has to be passed as numbers
+      thisBooking.makeBooked(thisBooking.datePicker.value, utils.numberToHour(thisBooking.hour), parseInt(hourInput.value, 10), thisBooking.dom.activeTable);
+  
       // reset after sending to API
       for (const input of checkAllInputs) {
         input.value = null;
       }
       peopleInput.value = 1;
       hourInput.value = 1;
-      window.switcher = false;
+      thisBooking.activeTable = false;
+      thisBooking.dom.floorPlan.style.borderColor = 'black';
       thisBooking.initWidgets();
     });
   }

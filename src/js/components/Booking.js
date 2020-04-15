@@ -12,9 +12,12 @@ import HourPicker from './HourPicker.js';
 class Booking {
   constructor(element, tables) {
     const thisBooking = this;
+    window.switcher = false;
     thisBooking.render(element, tables);
     thisBooking.initWidgets();
     thisBooking.getData();
+    thisBooking.tableSelection();
+    thisBooking.sendBookingRequest();
   }
 
   getData() {
@@ -144,7 +147,7 @@ class Booking {
         table.classList.remove(classNames.booking.tableBooked);
       }
     }
-
+    console.log('thisBooking.booked', thisBooking.booked);
   }
 
   render(element, tables) {
@@ -168,7 +171,9 @@ class Booking {
     thisBooking.dom.hourPicker = bookingWrapper.querySelector(select.widgets.hourPicker.wrapper);
 
     thisBooking.dom.tables = bookingWrapper.querySelectorAll(select.booking.tables);
-    // console.log(thisBooking.dom.tables);
+
+    thisBooking.dom.orderConfirmation = document.querySelector('.order-confirmation');
+
   }
 
   initWidgets() {
@@ -184,6 +189,126 @@ class Booking {
 
     thisBooking.dom.wrapper.addEventListener('updated', function () {
       thisBooking.updateDOM();
+
+      thisBooking.tableSelection();
+    });
+  }
+
+  trigger(e) {
+    const clicked = e.target;
+
+
+    // clear all marked tables so we can have only one chosen at the time
+    const tables = document.querySelector(select.containerOf.booking).querySelectorAll(select.booking.tables);
+    for (const table of tables) {
+      table.classList.remove('chosen');
+    }
+
+    if (clicked.classList.contains(classNames.booking.tableBooked)) {
+      return;
+
+    } else {
+      clicked.classList.toggle('chosen');
+      window.switcher = true;
+
+    }
+  }
+
+  tableSelection() {
+    const thisBooking = this;
+    //reset all tables
+    for (const table of thisBooking.dom.tables) {
+      table.classList.remove('chosen');
+      //event listiner in remote function
+      table.addEventListener('click', thisBooking.trigger);
+    }
+  }
+
+  sendBookingRequest() {
+    const thisBooking = this;
+    /// current value of people and hour wiget
+    let peopleInput = thisBooking.dom.peopleAmount.querySelector('input');
+    let hourInput = thisBooking.dom.hoursAmount.querySelector('input');
+   
+    //listiner for submit
+    thisBooking.dom.wrapper.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      thisBooking.dom.guestsAddress = thisBooking.dom.orderConfirmation.querySelector('[name="address"]');
+      console.log(thisBooking.dom.guestsAddress.value);
+      thisBooking.dom.guestsNumber = thisBooking.dom.orderConfirmation.querySelector('[name="phone"]');
+
+      // collect all of inputs
+      let checkAllInputs = thisBooking.dom.orderConfirmation.querySelectorAll('input');
+      console.log(checkAllInputs);
+
+      // simple 2 step validation
+      // check if every single input is ok
+      for (const checkInput of checkAllInputs) {
+        let guestName = checkInput.value;
+        if (guestName.length > 5) {
+          checkInput.classList.remove('error');
+        } else {
+          checkInput.classList.add('error');
+        }
+      }
+      // if all inputs are ok then allow to run
+      for (const checkInput of checkAllInputs) {
+        if (checkInput.classList.contains('error')) {
+          return;
+        }
+      }
+      //check if table marked
+      if (!window.switcher) {
+        return;
+      }
+      // taking some data needed for payload after succesfull validation
+      for (const table of thisBooking.dom.tables) {
+        if (table.classList.contains('chosen')) {
+          for (const key in table.dataset) {
+            if (table.dataset.hasOwnProperty(key)) {
+              const element = table.dataset[key];
+              // console.log(key);
+              // console.log();
+              // console.log(peopleInput.value, hourInput.value);
+              thisBooking.dom.activeTable = element;
+            }
+          }
+        }
+      }
+      //fetch stuff
+      const url = settings.db.url + '/' + settings.db.order;
+
+      const payload = {
+        address: thisBooking.dom.guestsAddress.value,
+        number: thisBooking.dom.guestsNumber.value,
+        table: thisBooking.dom.activeTable,
+        time: thisBooking.hour,
+        numberOfPeople: peopleInput.value,
+        durationOfBooking: hourInput.value,
+      };
+
+      const options = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      };
+      fetch(url, options)
+        .then(function (response) {
+          console.log('response', response);
+        }).then(function (parsedResponse) {
+          console.log('parsedResponse', parsedResponse);
+        });
+      // reset after sending to API
+      for (const input of checkAllInputs) {
+        input.value = null;
+      }
+      peopleInput.value = 1;
+      hourInput.value = 1;
+      window.switcher = false;
+      thisBooking.initWidgets();
     });
   }
 }

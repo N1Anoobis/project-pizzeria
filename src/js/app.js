@@ -13,6 +13,9 @@ const app = {
     const thisApp = this;
     thisApp.pages = document.querySelector(select.containerOf.pages).children;
     thisApp.navLinks = document.querySelectorAll(select.nav.links);
+    // console.log(thisApp.navLinks)
+    thisApp.navLinks[0].style.display = 'none';
+
     const idFromHash = window.location.hash.replace('#/', '');
     let pageMatchingHash = thisApp.pages[0].id;
     for (const page of thisApp.pages) {
@@ -23,10 +26,12 @@ const app = {
     }
 
     thisApp.activatePage(pageMatchingHash);
+    console.log(pageMatchingHash);
     for (const link of thisApp.navLinks) {
       link.addEventListener('click', function (event) {
         const clickedElement = this;
         event.preventDefault();
+
         // get page id from href atribute
         const id = clickedElement.getAttribute('href').replace('#', '');
         // run thisApp.activePages with that id
@@ -38,6 +43,7 @@ const app = {
   },
 
   activatePage: function (pageId) {
+    // let pageId = pageId
     const thisApp = this;
     // add class 'active' to matching pages, remove from non-match
     for (let page of thisApp.pages) {
@@ -48,6 +54,41 @@ const app = {
       link.classList.toggle(
         classNames.nav.active,
         link.getAttribute('href') == '#' + pageId);
+    }
+    // removing elements from home page
+    const cart = document.querySelector(select.containerOf.cart);
+
+    const nav = document.querySelectorAll(select.nav.links);
+    console.log(nav);
+    if (pageId == 'home') {
+
+      for (const na of nav) {
+        na.style.display = 'none';
+      }
+      cart.style.display = 'none';
+      //code for  home page
+      const menuLinks = document.querySelectorAll('.home a');
+      console.log(menuLinks);
+      for (let link of menuLinks) {
+        link.addEventListener('click', function (event) {
+          const clickedElement = this;
+          event.preventDefault();
+          // get page id from href atribute
+          const id = clickedElement.getAttribute('href').replace('#', '');
+          // run thisApp.activePages with that id
+          thisApp.activatePage(id);
+          //change URL hash
+          window.location.hash = '#/' + id;
+        });
+      }
+
+    } else {
+      cart.style.display = 'block';
+      for (const na of nav) {
+        // thisApp.navLinks[0].style.display = 'none';
+        na.style.display = 'block';
+
+      }
     }
   },
 

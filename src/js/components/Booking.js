@@ -174,7 +174,7 @@ class Booking {
       // pass event to check it
       thisBooking.tableSelection(e);
 
-      thisBooking.activTable = false;
+      // thisBooking.activTable = false;
     });
   }
 
@@ -251,6 +251,7 @@ class Booking {
       }
 
       //check if table marked
+      console.log(thisBooking.activTable);
       if (!thisBooking.activTable) {
         thisBooking.dom.floorPlan.style.borderColor = 'red';
         return;

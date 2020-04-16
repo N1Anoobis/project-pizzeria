@@ -169,10 +169,10 @@ class Booking {
 
     thisBooking.hourPicker = new HourPicker(thisBooking.dom.hourPicker);
 
-    thisBooking.dom.wrapper.addEventListener('updated', function () {
+    thisBooking.dom.wrapper.addEventListener('updated', function (e) {
       thisBooking.updateDOM();
-
-      thisBooking.tableSelection();
+      // pass event to check it
+      thisBooking.tableSelection(e);
 
       thisBooking.activTable = false;
     });
@@ -181,11 +181,12 @@ class Booking {
   trigger(e) {
     // const thisBooking = this;
     const clicked = e.target;
-
+    console.log('trigger dziala');
     // clear all marked tables so we can have only one chosen at the time
     // because of bind this.dom.tables works
     for (const table of this.dom.tables) {
       table.classList.remove('chosen');
+      this.activTable = false;
     }
 
     if (clicked.classList.contains(classNames.booking.tableBooked)) {
@@ -195,33 +196,32 @@ class Booking {
       clicked.classList.add('chosen');
       this.activTable = clicked.dataset.table;
     }
-    // taking some data needed for payload after succesfull validation
-    for (const table of this.dom.tables) {
-      if (table.classList.contains('chosen')) {
-        for (const key in table.dataset) {
-          if (table.dataset.hasOwnProperty(key)) {
-            const element = table.dataset[key];
-            //parse that value to number
-            this.dom.activeTable = parseInt(element, 10);
-          }
-        }
-      }
-    }
+
+    // taking some data needed for payload before succesfull validation
+    this.dom.activeTable = parseInt(clicked.dataset['table'], 10);
   }
 
-  tableSelection() {
+  tableSelection(passedE) {
     const thisBooking = this;
-    //reset all tables
-    for (const table of thisBooking.dom.tables) {
-      table.classList.remove('chosen');
+    // check if event come from people widget input
+    if (passedE.srcElement.classList.value == `widget-amount people-amount`) {
+      return;
+    } else {
+      //if not reset all tables
+      for (const table of thisBooking.dom.tables) {
+        table.classList.remove('chosen');
 
+      }
     }
   }
 
   addListener() {
     const thisBooking = this;
+
     for (const table of thisBooking.dom.tables) {
-      //event listiner in remote function
+      console.log(table.classList.contains('booked'));
+      console.log(table.classList);
+
       table.addEventListener('click', thisBooking.trigger.bind(thisBooking));
     }
   }
@@ -248,6 +248,14 @@ class Booking {
           checkInput.classList.add('error');
         } else if (checkInput.value.length < 8)
           checkInput.classList.add('error');
+      }
+
+      //check if table marked
+      if (!thisBooking.activTable) {
+        thisBooking.dom.floorPlan.style.borderColor = 'red';
+        return;
+      } else {
+        thisBooking.dom.floorPlan.style.borderColor = 'black';
       }
 
       thisBooking.dom.guestsAddress.addEventListener('input', function (e) {
@@ -279,11 +287,6 @@ class Booking {
         if (checkInput.classList.contains('error')) {
           return;
         }
-      }
-      //check if table marked
-      if (!thisBooking.activTable) {
-        thisBooking.dom.floorPlan.style.borderColor = 'red';
-        return;
       }
 
       //fetch stuff

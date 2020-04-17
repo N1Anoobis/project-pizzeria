@@ -80,13 +80,16 @@ const app = {
           //change URL hash
           window.location.hash = '#/' + id;
         });
+        // carusel lunch
+        thisApp.caruselInit();
       }
-      // carusel lunch
-      thisApp.caruselInit();
+
 
     } else {
       cart.style.display = 'block';
       header.style.height = '';
+      console.log(thisApp.intervalValue);
+      clearInterval(thisApp.intervalValue);
       // remove home page from visable menu
       for (const na of nav) {
         // thisApp.navLinks[0].style.display = 'none';
@@ -97,44 +100,45 @@ const app = {
   },
 
   caruselInit() {
+    const thisApp = this;
     let activeElement = 0;
     // needed elements from page
     const caruselImagesHTML = document.querySelector('article img');
     const caruselH2HTML = document.querySelector('article h2');
     const caruselAuthorHTML = document.querySelector('article .carusel-author');
-    // const caruselNotEnoingDiv = document.querySelector('.carusel-text-content');
-    // const instaLink = document.querySelector('.insta-link');
+    const caruselDots = document.querySelectorAll('.carusel-dots i');
+
     // data in arrays could be possibly taken from API in future
     const caruselImages = ['assets/pizza-3.jpg', 'assets/pizza-4.jpg',
       'assets/pizza-5.jpg'
     ];
     const caruselH2 = ['AMAZING SERVICE !', 'RECOMENNDED !', ' SIMPLY BEST !', 'ALLWAYS GREAT !'];
     const caruselAuthor = ['-Mike Allford', '-Jack Black', '-Edmund West', 'Joe Nelson'];
-    //some css that didnt want to work in css file
-    // caruselNotEnoingDiv.style.marginTop ='0';
-    // caruselH2HTML.style.fontWeight ='lighter';
-    // caruselH2HTML.style.fontSize ='14'+'px';
-    // instaLink.style.color ='#ff6b6b';
-    // instaLink.style.textDecoration ='underline';
-    // instaLink.style.marginLeft ='25'+'px';
-    // instaLink.style.marginTop ='15'+'px';
+
     // simple loop
     function changeElement() {
+     
       if (activeElement == caruselImages.length) {
         activeElement = 0;
       }
+      //simple active dot adder
+      for (const dot of caruselDots) {
+        dot.classList.remove('active');
+      }
+      caruselDots[activeElement].classList.add('active');
       console.log(activeElement);
       caruselImagesHTML.src = caruselImages[activeElement];
       caruselH2HTML.textContent = caruselH2[activeElement];
       caruselAuthorHTML.textContent = caruselAuthor[activeElement];
       activeElement++;
     }
-    setInterval(changeElement, 3000);
+    thisApp.intervalValue = setInterval(changeElement, 3000);
+    console.log(thisApp.intervalValue);
   },
 
   initBooking: function (tables) {
     const thisApp = this;
-    // console.log(tables);
+
     const bookingContener = document.querySelector(select.containerOf.booking);
     thisApp.booking = new Booking(bookingContener, tables);
   },
@@ -190,7 +194,6 @@ const app = {
 
   init: function () {
     const thisApp = this;
-
     thisApp.initPages();
     thisApp.initData();
     thisApp.initCart();

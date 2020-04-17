@@ -102,7 +102,6 @@
   margin: 20px 0;
 }
 
-
 // CARUSEL
 .carusel {
   margin: auto;
@@ -114,19 +113,15 @@
   margin-top: 50px;
 
   .carusel-text-content {
-
     margin-top: 0;
     padding: 0 0 0 15px;
 
     h2 {
       margin-top: 0;
-      // display: none;
       font-family: 'Oswald', sans-serif;
-      // color: rgb(224, 50, 50);
       font-size: 14px;
       letter-spacing: 3px;
       font-weight: lighter;
-      // line-height: 0.2;
     }
 
     p.carusel-text {
@@ -154,6 +149,10 @@
     font-size: 10px;
     margin: 9px;
   }
+
+  .active{
+    color: #fd6969;
+  }
 }
 
 // galery
@@ -164,7 +163,6 @@
   margin: 70px 0;
   justify-content: center;
 
-
   .insta-link {
     margin-right: auto;
     padding-left: 20px;
@@ -174,7 +172,6 @@
     // text-align: left;
     padding-bottom: 65px;
   }
-
 }
 
 .gallery-item {

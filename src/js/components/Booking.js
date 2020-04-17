@@ -174,7 +174,7 @@ class Booking {
       // pass event to check it
       thisBooking.tableSelection(e);
       //table is not saved when red mark desappear
-      thisBooking.activTable = false;
+      thisBooking.activeTable = null;
     });
   }
 
@@ -186,14 +186,11 @@ class Booking {
     if (!clicked.classList.contains(classNames.booking.tableBooked)) {
       for (const table of this.dom.tables) {
         table.classList.remove('chosen');
-        this.activTable = false;
       }
       clicked.classList.add('chosen');
-      this.activTable = clicked.dataset.table;
+      // taking some data needed for payload before succesfull validation
+      this.activeTable = parseInt(clicked.dataset['table'], 10);
     }
-
-    // taking some data needed for payload before succesfull validation
-    this.dom.activeTable = parseInt(clicked.dataset['table'], 10);
   }
 
   tableSelection(passedE) {
@@ -247,7 +244,7 @@ class Booking {
 
       //check if table marked
       console.log(thisBooking.activTable);
-      if (!thisBooking.activTable) {
+      if (!thisBooking.activeTable) {
         thisBooking.dom.floorPlan.style.borderColor = 'red';
         return;
       } else {
@@ -291,7 +288,7 @@ class Booking {
       const payload = {
         address: thisBooking.dom.guestsAddress.value,
         number: thisBooking.dom.guestsNumber.value,
-        table: thisBooking.dom.activeTable,
+        table: thisBooking.activeTable,
         hour: utils.numberToHour(thisBooking.hour),
         date: thisBooking.datePicker.value,
         ppl: thisBooking.peopleAmount.value,
@@ -312,7 +309,7 @@ class Booking {
         });
 
       // duration and table has to be passed as numbers
-      thisBooking.makeBooked(thisBooking.datePicker.value, utils.numberToHour(thisBooking.hour), thisBooking.hoursAmount.value, thisBooking.dom.activeTable);
+      thisBooking.makeBooked(thisBooking.datePicker.value, utils.numberToHour(thisBooking.hour), thisBooking.hoursAmount.value, thisBooking.activeTable);
 
       // reset after sending to API
       for (const input of checkAllInputs) {
@@ -320,7 +317,7 @@ class Booking {
       }
       thisBooking.peopleAmount.value = 1;
       thisBooking.hoursAmount.value = 1;
-      thisBooking.activeTable = false;
+      thisBooking.activeTable = null;
       thisBooking.dom.floorPlan.style.borderColor = 'black';
       thisBooking.initWidgets();
     });

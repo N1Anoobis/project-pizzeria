@@ -102,8 +102,8 @@ const app = {
     const caruselImagesHTML = document.querySelector('article img');
     const caruselH2HTML = document.querySelector('article h2');
     const caruselAuthorHTML = document.querySelector('article .carusel-author');
-    const caruselNotEnoingDiv = document.querySelector('.carusel-text-content');
-    const instaLink = document.querySelector('.insta-link');
+    // const caruselNotEnoingDiv = document.querySelector('.carusel-text-content');
+    // const instaLink = document.querySelector('.insta-link');
     // data in arrays could be possibly taken from API in future
     const caruselImages = ['assets/pizza-3.jpg', 'assets/pizza-4.jpg',
       'assets/pizza-5.jpg'
@@ -111,13 +111,13 @@ const app = {
     const caruselH2 = ['AMAZING SERVICE !', 'RECOMENNDED !', ' SIMPLY BEST !', 'ALLWAYS GREAT !'];
     const caruselAuthor = ['-Mike Allford', '-Jack Black', '-Edmund West', 'Joe Nelson'];
     //some css that didnt want to work in css file
-    caruselNotEnoingDiv.style.marginTop ='0';
-    caruselH2HTML.style.fontWeight ='lighter';
-    caruselH2HTML.style.fontSize ='14'+'px';
-    instaLink.style.color ='#ff6b6b';
-    instaLink.style.textDecoration ='underline';
-    instaLink.style.marginLeft ='25'+'px';
-    instaLink.style.marginTop ='15'+'px';
+    // caruselNotEnoingDiv.style.marginTop ='0';
+    // caruselH2HTML.style.fontWeight ='lighter';
+    // caruselH2HTML.style.fontSize ='14'+'px';
+    // instaLink.style.color ='#ff6b6b';
+    // instaLink.style.textDecoration ='underline';
+    // instaLink.style.marginLeft ='25'+'px';
+    // instaLink.style.marginTop ='15'+'px';
     // simple loop
     function changeElement() {
       if (activeElement == caruselImages.length) {

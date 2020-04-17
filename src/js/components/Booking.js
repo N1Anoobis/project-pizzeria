@@ -173,8 +173,8 @@ class Booking {
       thisBooking.updateDOM();
       // pass event to check it
       thisBooking.tableSelection(e);
-
-      // thisBooking.activTable = false;
+      //table is not saved when red mark desappear
+      thisBooking.activTable = false;
     });
   }
 
@@ -182,17 +182,12 @@ class Booking {
     // const thisBooking = this;
     const clicked = e.target;
     console.log('trigger dziala');
-    // clear all marked tables so we can have only one chosen at the time
-    // because of bind this.dom.tables works
-    for (const table of this.dom.tables) {
-      table.classList.remove('chosen');
-      this.activTable = false;
-    }
 
-    if (clicked.classList.contains(classNames.booking.tableBooked)) {
-      return;
-
-    } else {
+    if (!clicked.classList.contains(classNames.booking.tableBooked)) {
+      for (const table of this.dom.tables) {
+        table.classList.remove('chosen');
+        this.activTable = false;
+      }
       clicked.classList.add('chosen');
       this.activTable = clicked.dataset.table;
     }

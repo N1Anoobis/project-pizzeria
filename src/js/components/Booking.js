@@ -219,8 +219,8 @@ class Booking {
     const thisBooking = this;
 
     for (const table of thisBooking.dom.tables) {
-      console.log(table.classList.contains('booked'));
-      console.log(table.classList);
+      // console.log(table.classList.contains('booked'));
+      // console.log(table.classList);
 
       table.addEventListener('click', thisBooking.trigger.bind(thisBooking));
     }

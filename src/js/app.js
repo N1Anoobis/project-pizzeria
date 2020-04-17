@@ -55,20 +55,20 @@ const app = {
         classNames.nav.active,
         link.getAttribute('href') == '#' + pageId);
     }
+
     // removing elements from home page
     const cart = document.querySelector(select.containerOf.cart);
-
     const nav = document.querySelectorAll(select.nav.links);
-    console.log(nav);
+    const header = document.querySelector('.header');
     if (pageId == 'home') {
-
       for (const na of nav) {
         na.style.display = 'none';
       }
       cart.style.display = 'none';
+      header.style.height = '200px';
+
       //code for  home page
       const menuLinks = document.querySelectorAll('.home a');
-      console.log(menuLinks);
       for (let link of menuLinks) {
         link.addEventListener('click', function (event) {
           const clickedElement = this;
@@ -81,15 +81,55 @@ const app = {
           window.location.hash = '#/' + id;
         });
       }
+      // carusel lunch
+      thisApp.caruselInit();
 
     } else {
       cart.style.display = 'block';
+      header.style.height = '';
+      // remove home page from visable menu
       for (const na of nav) {
         // thisApp.navLinks[0].style.display = 'none';
         na.style.display = 'block';
 
       }
     }
+  },
+
+  caruselInit() {
+    let activeElement = 0;
+    // needed elements from page
+    const caruselImagesHTML = document.querySelector('article img');
+    const caruselH2HTML = document.querySelector('article h2');
+    const caruselAuthorHTML = document.querySelector('article .carusel-author');
+    const caruselNotEnoingDiv = document.querySelector('.carusel-text-content');
+    const instaLink = document.querySelector('.insta-link');
+    // data in arrays could be possibly taken from API in future
+    const caruselImages = ['assets/pizza-3.jpg', 'assets/pizza-4.jpg',
+      'assets/pizza-5.jpg'
+    ];
+    const caruselH2 = ['AMAZING SERVICE !', 'RECOMENNDED !', ' SIMPLY BEST !', 'ALLWAYS GREAT !'];
+    const caruselAuthor = ['-Mike Allford', '-Jack Black', '-Edmund West', 'Joe Nelson'];
+    //some css that didnt want to work in css file
+    caruselNotEnoingDiv.style.marginTop ='0';
+    caruselH2HTML.style.fontWeight ='lighter';
+    caruselH2HTML.style.fontSize ='14'+'px';
+    instaLink.style.color ='#ff6b6b';
+    instaLink.style.textDecoration ='underline';
+    instaLink.style.marginLeft ='25'+'px';
+    instaLink.style.marginTop ='15'+'px';
+    // simple loop
+    function changeElement() {
+      if (activeElement == caruselImages.length) {
+        activeElement = 0;
+      }
+      console.log(activeElement);
+      caruselImagesHTML.src = caruselImages[activeElement];
+      caruselH2HTML.textContent = caruselH2[activeElement];
+      caruselAuthorHTML.textContent = caruselAuthor[activeElement];
+      activeElement++;
+    }
+    setInterval(changeElement, 3000);
   },
 
   initBooking: function (tables) {

@@ -24,9 +24,7 @@
       }
 
       p {
-        // display: block;
         margin-bottom: 20px;
-
       }
     }
 
@@ -37,10 +35,6 @@
       display: flex;
       flex-direction: row;
       flex-wrap: wrap;
-
-      .wide {
-        //no idea
-      }
 
       a {
         color: #fff;
@@ -107,7 +101,6 @@
   margin: auto;
   width: 92%;
   display: flex;
-  overflow: hidden;
   height: 300px;
   align-items: center;
   margin-top: 50px;
@@ -125,7 +118,6 @@
     }
 
     p.carusel-text {
-
       margin: 6px 0;
     }
   }
@@ -140,7 +132,6 @@
 }
 
 .carusel-dots {
-
   text-align: center;
   margin-top: -35px;
 
@@ -150,14 +141,13 @@
     margin: 9px;
   }
 
-  .active{
+  .active {
     color: #fd6969;
   }
 }
 
 // galery
 .gallery-wrapper {
-
   display: flex;
   flex-wrap: wrap;
   margin: 70px 0;
@@ -169,27 +159,36 @@
     margin-top: 20px;
     color: #ff6b6b;
     text-decoration: underline;
-    // text-align: left;
     padding-bottom: 65px;
   }
 }
 
+// squares made with no hight set. need to adjust of z-index in order to make overlay work peoperly
 .gallery-item {
   position: relative;
-
   margin: 4px;
   flex: 0 0 30%;
-  max-width: 30%;
-  height: 200px;
+  // height: 200px;
+  width: 30%;
   text-align: center;
 }
 
 .gallery-item img {
-  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   border-radius: 4px;
+}
+
+.gallery-item:after {
+  content: '';
+  display: block;
+  padding-top: 100%;
 }
 
 .gallery-item:before {
@@ -204,6 +203,8 @@
   border-radius: 4px;
   opacity: 0.5;
   transition: .4s;
+  z-index: 1;
+
 }
 
 .gallery-item figcaption {
@@ -212,18 +213,16 @@
   width: 100%;
   top: 50%;
   transform: translateY(-50%);
-
-  // font-family: $font-header;
   text-transform: uppercase;
   font-size: 14px;
   transition: .4s;
+  z-index: 2;
 
   i {
     color: #eaf0d5;
     font-size: 20px;
     margin: 5px;
     transition: .2s;
-
 
     &:hover {
       color: #ff6b6b;
@@ -234,4 +233,33 @@
 .gallery-item:hover:before,
 .gallery-item:hover figcaption {
   display: block;
+}
+
+@media (max-width: 630px) {
+  .order,
+  .booking {
+    p {
+      display: none;
+    }
+  }
+
+  .carusel {
+    flex-direction: column;
+    margin: 100px auto;
+    height: 350px;
+
+    img {
+      margin-right: 0;
+    }
+
+    .carusel-text-content {
+      text-align: center;
+      margin-top: 20px;
+    }
+  }
+
+  .gallery-item {
+    flex: 0 0 45%;
+    width: 45%;
+  }
 }

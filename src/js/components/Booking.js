@@ -178,7 +178,8 @@ class Booking {
       //table is not saved when red mark desappear
       thisBooking.activeTable = null;
       //reset array
-      thisBooking.activeTableArray.length = 0;
+      // thisBooking.activeTableArray.length = 0;
+      thisBooking.activeTableArray = [];
     });
   }
 
@@ -198,10 +199,10 @@ class Booking {
       clicked.classList.toggle('chosen');
       // taking some data needed for payload before succesfull validation
 
-      this.activeTable = parseInt(clicked.dataset['table'], 10);
+      // this.activeTable = parseInt(clicked.dataset['table'], 10);
     }
     //push active tables in to array
-    this.activeTableArray.push(this.activeTable);
+    this.activeTableArray.push(parseInt(clicked.dataset['table'], 10));
   }
 
   tableSelection(passedE) {
@@ -253,8 +254,8 @@ class Booking {
       }
 
       //check if table marked
-      console.log(thisBooking.activTable);
-      if (!thisBooking.activeTable) {
+      console.log(thisBooking.activeTableArray);
+      if (!thisBooking.activeTableArray.length) {
         thisBooking.dom.floorPlan.style.borderColor = 'red';
         return;
       } else {
@@ -332,7 +333,9 @@ class Booking {
       thisBooking.peopleAmount.value = 1;
       thisBooking.hoursAmount.value = 1;
       thisBooking.activeTable = null;
-      thisBooking.activeTableArray.length = 0;
+      // thisBooking.activeTableArray.length = 0;
+      thisBooking.activeTableArray = [];
+      console.log(thisBooking.activeTableArray);
       thisBooking.dom.floorPlan.style.borderColor = 'black';
       thisBooking.initWidgets();
     });

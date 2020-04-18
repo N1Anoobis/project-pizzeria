@@ -154,7 +154,6 @@
       &::after {
         border-radius: 50%;
       }
-
     }
 
     &.booked {
@@ -201,4 +200,49 @@
 
 .chosen {
   border: 1px red solid;
+}
+
+@media (max-width: 630px) {
+  .time-picker {
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 50px;
+  }
+
+  .order-confirmation {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    // margin-top: 20px;
+    input {
+      margin: 3px;
+
+    }
+
+    button {
+      margin-top: 10px;
+    }
+  }
+
+  .booking-options {
+    flex-direction: column;
+    align-items: center;
+    margin-top: 430px;
+    margin-bottom: 20px;
+
+    label {
+      text-align: center;
+    }
+  }
+
+  .booking-form {
+    position: relative;
+  }
+
+  .floor-plan {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
 }

@@ -26,7 +26,7 @@ const app = {
     }
 
     thisApp.activatePage(pageMatchingHash);
-    console.log(pageMatchingHash);
+    // console.log(pageMatchingHash);
     for (const link of thisApp.navLinks) {
       link.addEventListener('click', function (event) {
         const clickedElement = this;
@@ -88,8 +88,8 @@ const app = {
     } else {
       cart.style.display = 'block';
       header.style.height = '';
-      console.log(thisApp.intervalValue);
-      clearInterval(thisApp.intervalValue);
+      // console.log(thisApp.intervalValue);
+      
       // remove home page from visable menu
       for (const na of nav) {
         // thisApp.navLinks[0].style.display = 'none';
@@ -126,14 +126,15 @@ const app = {
         dot.classList.remove('active');
       }
       caruselDots[activeElement].classList.add('active');
-      console.log(activeElement);
+      // console.log(activeElement);
       caruselImagesHTML.src = caruselImages[activeElement];
       caruselH2HTML.textContent = caruselH2[activeElement];
       caruselAuthorHTML.textContent = caruselAuthor[activeElement];
       activeElement++;
     }
+    clearInterval(thisApp.intervalValue);
     thisApp.intervalValue = setInterval(changeElement, 3000);
-    console.log(thisApp.intervalValue);
+    // console.log(thisApp.intervalValue);
   },
 
   initBooking: function (tables) {

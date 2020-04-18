@@ -18,6 +18,8 @@ class Booking {
     thisBooking.getData();
     thisBooking.addListener();
     thisBooking.sendBookingRequest();
+    //array for multi booking
+    thisBooking.activeTableArray = [];
   }
 
   getData() {
@@ -175,6 +177,8 @@ class Booking {
       thisBooking.tableSelection(e);
       //table is not saved when red mark desappear
       thisBooking.activeTable = null;
+      //reset array
+      thisBooking.activeTableArray.length = 0;
     });
   }
 
@@ -182,15 +186,22 @@ class Booking {
     // const thisBooking = this;
     const clicked = e.target;
     console.log('trigger dziala');
+    // array to store many tables 
+
 
     if (!clicked.classList.contains(classNames.booking.tableBooked)) {
-      for (const table of this.dom.tables) {
-        table.classList.remove('chosen');
-      }
-      clicked.classList.add('chosen');
+      // loop and toggle instead of add for multitable
+
+      // for (const table of this.dom.tables) {
+      //   table.classList.remove('chosen');
+      // }
+      clicked.classList.toggle('chosen');
       // taking some data needed for payload before succesfull validation
+
       this.activeTable = parseInt(clicked.dataset['table'], 10);
     }
+    //push active tables in to array
+    this.activeTableArray.push(this.activeTable);
   }
 
   tableSelection(passedE) {
@@ -202,7 +213,6 @@ class Booking {
       //if not reset all tables
       for (const table of thisBooking.dom.tables) {
         table.classList.remove('chosen');
-
       }
     }
   }
@@ -282,34 +292,38 @@ class Booking {
         }
       }
 
-      //fetch stuff
-      const url = settings.db.url + '/' + settings.db.booking;
+      //loop to handle multi table booking
+      for (const active of thisBooking.activeTableArray) {
+        //fetch stuff
+        const url = settings.db.url + '/' + settings.db.booking;
 
-      const payload = {
-        address: thisBooking.dom.guestsAddress.value,
-        number: thisBooking.dom.guestsNumber.value,
-        table: thisBooking.activeTable,
-        hour: utils.numberToHour(thisBooking.hour),
-        date: thisBooking.datePicker.value,
-        ppl: thisBooking.peopleAmount.value,
-        repeat: false,
-        duration: thisBooking.hoursAmount.value,
-      };
+        const payload = {
+          address: thisBooking.dom.guestsAddress.value,
+          number: thisBooking.dom.guestsNumber.value,
+          table: active,
+          hour: utils.numberToHour(thisBooking.hour),
+          date: thisBooking.datePicker.value,
+          ppl: thisBooking.peopleAmount.value,
+          repeat: false,
+          duration: thisBooking.hoursAmount.value,
+        };
 
-      const options = {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      };
-      fetch(url, options)
-        .then(function (response) {
-          console.log('response', response);
-        });
+        const options = {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        };
+        fetch(url, options)
+          .then(function (response) {
+            console.log('response', response);
+          });
 
-      // duration and table has to be passed as numbers
-      thisBooking.makeBooked(thisBooking.datePicker.value, utils.numberToHour(thisBooking.hour), thisBooking.hoursAmount.value, thisBooking.activeTable);
+        // duration and table has to be passed as numbers
+        thisBooking.makeBooked(thisBooking.datePicker.value, utils.numberToHour(thisBooking.hour), thisBooking.hoursAmount.value, active);
+        console.log(thisBooking.booked);
+      }
 
       // reset after sending to API
       for (const input of checkAllInputs) {
@@ -318,6 +332,7 @@ class Booking {
       thisBooking.peopleAmount.value = 1;
       thisBooking.hoursAmount.value = 1;
       thisBooking.activeTable = null;
+      thisBooking.activeTableArray.length = 0;
       thisBooking.dom.floorPlan.style.borderColor = 'black';
       thisBooking.initWidgets();
     });

@@ -2,8 +2,10 @@
 import {
   settings,
   select,
+  templates,
   classNames
 } from './settings.js';
+import utils from './utils.js';
 import Product from './components/Product.js';
 import Cart from './components/Cart.js';
 import Booking from './components/Booking.js';
@@ -89,7 +91,7 @@ const app = {
       cart.style.display = 'block';
       header.style.height = '';
       // console.log(thisApp.intervalValue);
-      
+
       // remove home page from visable menu
       for (const na of nav) {
         // thisApp.navLinks[0].style.display = 'none';
@@ -103,9 +105,9 @@ const app = {
     const thisApp = this;
     let activeElement = 0;
     // needed elements from page
-    const caruselImagesHTML = document.querySelector('article img');
-    const caruselH2HTML = document.querySelector('article h2');
-    const caruselAuthorHTML = document.querySelector('article .carusel-author');
+    // const caruselImagesHTML = document.querySelector('article.carusel.carusel-picture');
+    // const caruselH2HTML = document.querySelector('article.carusel .carusel-text-content h2');
+    // const caruselAuthorHTML = document.querySelector('article.carusel .carusel-author');
     const caruselDots = document.querySelectorAll('.carusel-dots i');
 
     // data in arrays could be possibly taken from API in future
@@ -117,7 +119,8 @@ const app = {
 
     // simple loop
     function changeElement() {
-     
+      // console.log(caruselImages[2])
+      // console.log(caruselImages[activeElement])
       if (activeElement == caruselImages.length) {
         activeElement = 0;
       }
@@ -126,15 +129,39 @@ const app = {
         dot.classList.remove('active');
       }
       caruselDots[activeElement].classList.add('active');
-      // console.log(activeElement);
-      caruselImagesHTML.src = caruselImages[activeElement];
-      caruselH2HTML.textContent = caruselH2[activeElement];
-      caruselAuthorHTML.textContent = caruselAuthor[activeElement];
+
+      let caruselData = {
+        src: caruselImages[activeElement],
+        h2Line: caruselH2[activeElement],
+        author: caruselAuthor[activeElement],
+      };
+      console.log(caruselData);
+      // console.log(templates.bookingWidget)
+      const generatedHTML = templates.carusel(caruselData);
+      console.log(generatedHTML);
+      let element = utils.createDOMFromHTML(generatedHTML);
+      console.log(element);
+
+      const carusel = thisApp.pages[0].querySelector('#template-carusel');
+      console.log(carusel);
+
+     
+      carusel.insertAdjacentHTML('afterend', generatedHTML);
+
+    
+
+
+
+
+
+      // caruselImagesHTML.src = caruselImages[activeElement];
+      // caruselH2HTML.textContent = caruselH2[activeElement];
+      // caruselAuthorHTML.textContent = caruselAuthor[activeElement];
       activeElement++;
     }
     clearInterval(thisApp.intervalValue);
     thisApp.intervalValue = setInterval(changeElement, 3000);
-    // console.log(thisApp.intervalValue);
+    
   },
 
   initBooking: function (tables) {

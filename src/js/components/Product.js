@@ -22,10 +22,8 @@ class Product {
   }
   renderInMenu() {
     const thisProduct = this;
-
     //generate HTML based on templated
     const generatedHTML = templates.menuProduct(thisProduct.data);
-
     //create elements using utils.createDOMFromHTML
     thisProduct.element = utils.createDOMFromHTML(generatedHTML);
     //find menu container

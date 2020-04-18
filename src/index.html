@@ -20,7 +20,7 @@
     <div class="container">
       <div class="header__wrapper">
         <div class="logo">
-         <h1 class="logo__title"><span>Mamma</span>Mia!</h1>
+          <h1 class="logo__title"><span>Mamma</span>Mia!</h1>
           <h2 class="logo__subtitle">the best homemade Italian food</h2>
         </div>
         <div class="main-nav">
@@ -86,16 +86,18 @@
             <p>TUE - SUN, 12PM - 12AM</p>
           </div>
         </div>
-        <article class="carusel">
-          <img src="assets/pizza-3.jpg" alt="">
+        <script id="template-carusel" type="text/x-handlebars-template">
+          <article class="carusel">
+            <img src={{ src }} alt="">
           <div class="carusel-text-content">
             <h2>AMAZING SERVICE !</h2>
             <P class="carusel-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus nam eveniet
               eius. Maxime ratione quos
               ut odio reiciendis reprehenderit </P>
-            <p class="carusel-author">-Mike Allford</p>
+            <p class="carusel-author">{{ author }}</p>
           </div>
         </article>
+      </script>
         <div class="carusel-dots">
           <i id="dot1" class="fas fa-circle active"></i>
           <i id="dot2" class="fas fa-circle"></i>
@@ -134,7 +136,7 @@
           </figure>
           <a class="insta-link">View more on Instagram</a>
         </div>
-        
+
     </section>
 
     <section id="order">

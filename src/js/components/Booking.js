@@ -153,7 +153,6 @@ class Booking {
     thisBooking.dom.hoursAmount = document.querySelector(select.booking.hoursAmount);
     thisBooking.dom.dataPicker = bookingWrapper.querySelector(select.widgets.datePicker.wrapper);
     thisBooking.dom.hourPicker = bookingWrapper.querySelector(select.widgets.hourPicker.wrapper);
-
     thisBooking.dom.tables = bookingWrapper.querySelectorAll(select.booking.tables);
 
     thisBooking.dom.orderConfirmation = document.querySelector('.order-confirmation');

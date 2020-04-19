@@ -4,7 +4,6 @@
   "description": "",
   "main": "index.html",
   "scripts": {
-    "start": "npm-run-all build build-dev -p watch:* server",
     "init-project": "npm install && npm-run-all init:*",
     "init:dirs": "mkdirp dist src/sass src/css src/vendor src/images src/js",
     "init:files": "touch README.md src/index.html src/sass/style.scss src/js/script.js",

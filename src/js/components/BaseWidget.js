@@ -43,7 +43,6 @@ class BaseWidget {
   renderValue() {
     const thisWidget = this;
     // in materials this line is used !
-    // thisWidget.dom.wrapper.innerHTML = thisWidget.value;
     thisWidget.dom.input = thisWidget.value;
   }
 

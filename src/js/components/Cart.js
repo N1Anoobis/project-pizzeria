@@ -8,10 +8,8 @@ class Cart {
 
     thisCart.deliveryFee = settings.cart.defaultDeliveryFee;
     thisCart.products = [];
-    // console.log('element', element);
     thisCart.getElements(element);
     thisCart.initActions();
-    // thisCart.update();
   }
 
   getElements(element) {
@@ -24,13 +22,13 @@ class Cart {
     thisCart.dom.form = thisCart.dom.wrapper.querySelector(select.cart.form);
 
     thisCart.dom.inputPhone = thisCart.dom.wrapper.querySelector(select.cart.phone);
-    //  console.log(thisCart.dom.inputPhone);
+
     thisCart.dom.inputAddress = thisCart.dom.wrapper.querySelector(select.cart.address);
 
     thisCart.dom.toggleTrigger = thisCart.dom.wrapper.querySelector(select.cart.toggleTrigger);
     // define element in with we will display active order afrer button add order clicked
     thisCart.dom.productList = thisCart.dom.wrapper.querySelector(select.cart.productList);
-    // console.log(thisCart.dom.productList);
+   
     thisCart.renderTotalsKeys = ['totalNumber', 'totalPrice', 'subtotalPrice', 'deliveryFee'];
 
     for (let key of thisCart.renderTotalsKeys) {
@@ -84,7 +82,6 @@ class Cart {
 
       let mobile = thisCart.dom.inputPhone.value;
 
-
       thisCart.dom.inputPhone.classList.remove('error');
 
       thisCart.dom.inputPhone.classList.remove('error');
@@ -129,7 +126,6 @@ class Cart {
     for (const prod of thisCart.products) {
       // let result = prod.getData();payload
       payload.products.push(prod.getData());
-
     }
 
     const options = {
@@ -138,12 +134,10 @@ class Cart {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(payload),
-
     };
 
     fetch(url, options)
       .then(function (response) {
-        // return response.json();
         console.log('response', response);
       }).then(function (parsedResponse) {
         console.log('parsedResponse', parsedResponse);
@@ -214,7 +208,6 @@ class Cart {
     const thisCart = this;
   
     thisCart.remove(thisProduct);
-  
   }
 
   //clearing cart after submiting order
@@ -223,9 +216,7 @@ class Cart {
     thisCart.products = [];
     cartProduct.dom.wrapper.remove();
     thisCart.update();
-    // thisCart.dom.inputPhone = thisCart.dom.wrapper.querySelector(select.cart.phone);
     thisCart.dom.inputPhone.value = null;
-    // thisCart.dom.inputAddress = thisCart.dom.wrapper.querySelector(select.cart.address);
     thisCart.dom.inputAddress.value = null;
   }
 }

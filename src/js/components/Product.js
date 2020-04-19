@@ -18,14 +18,12 @@ class Product {
     thisProduct.initAmountWidget();
     thisProduct.processOrder();
     thisProduct.customEventListiner();
-    // console.log('new Product:', thisProduct);
   }
   renderInMenu() {
     const thisProduct = this;
 
     //generate HTML based on templated
     const generatedHTML = templates.menuProduct(thisProduct.data);
-
     //create elements using utils.createDOMFromHTML
     thisProduct.element = utils.createDOMFromHTML(generatedHTML);
     //find menu container
@@ -62,15 +60,13 @@ class Product {
 
   edit(recived) {
     const thisProduct = this;
-    console.log('event passed', recived);
-
+  
     const checkedInputs = [];
     for (const param in recived.params) {
       if (recived.params.hasOwnProperty(param)) {
         const element = recived.params[param];
 
         for (const key in element.options) {
-          console.log('key', key);
           if (element.options.hasOwnProperty(key)) {
 
             for (const input of thisProduct.formInputs) {
@@ -90,10 +86,8 @@ class Product {
             }
           }
         }
-        console.log(checkedInputs);
       }
     }
-    console.log('current objec state', thisProduct.formInputs);
     //secend set of loops to handle proper display of results
     for (const input of thisProduct.formInputs) {
 
@@ -113,29 +107,8 @@ class Product {
     thisProduct.amountWidgetElem.querySelector('input').value = recived.amount;
   }
 
-  // version with no if
-  // initAccordion() {
-  //   const thisProduct = this;
-
-  //   const clickedElements = thisProduct.element.querySelectorAll(select.menuProduct.clickable);
-  //   for (const clEl of clickedElements) {
-  //     clEl.addEventListener('click', function (e) {
-  //       e.preventDefault();
-
-  //         console.log('all elements', allInEl);
-
-  //         allInEl.classList.remove('active');
-  //       }
-
-  //       clEl.parentNode.classList.toggle('active');
-
-  //     });
-  //   }
-  // }
-
   initAccordion() {
     const thisProduct = this;
-    // console.log(thisProduct.element);
     /* find the clickable trigger (the element that should react to clicking) */
     const clickedElements = thisProduct.element.querySelectorAll(select.menuProduct.clickable);
     /* START: click event listener to trigger */
@@ -143,7 +116,6 @@ class Product {
       clicked.addEventListener('click', function (e) {
         /* prevent default action for event */
         e.preventDefault();
-
         /* toggle active class on element of thisProduct */
         thisProduct.element.classList.toggle(classNames.menuProduct.wrapperActive);
         /* find all active products */
@@ -165,7 +137,6 @@ class Product {
 
   initOrderForm() {
     const thisProduct = this;
-    // console.log('initOrderForm');
     thisProduct.form.addEventListener('submit', function (event) {
       event.preventDefault();
       thisProduct.processOrder();
@@ -241,7 +212,6 @@ class Product {
                 };
               }
               thisProduct.params[paramID].options[optionId] = option.label;
-              // console.log(thisProduct.params.options);
               for (const allI of allIMG) {
                 allI.classList.add(classNames.menuProduct.imageVisible);
               }
@@ -256,9 +226,6 @@ class Product {
         }
       }
     }
-    // multiply price by amount
-    // price *= thisProduct.amountWidget.value;
-    // thisProduct.priceElem.textContent = price;
     /* multiply price by amount */
     thisProduct.priceSingle = price;
     thisProduct.price = thisProduct.priceSingle * thisProduct.amountWidget.value;
@@ -280,9 +247,6 @@ class Product {
     thisProduct.name = thisProduct.data.name;
     thisProduct.amount = thisProduct.amountWidget.value;
 
-
-    // app.cart.add(thisProduct);
-
     //new custom event 
     const event = new CustomEvent('add-to-cart', {
       bubbles: true,
@@ -293,7 +257,6 @@ class Product {
 
     thisProduct.element.dispatchEvent(event);
 
-    // console.log('data of order allready in class prouct', app.cart);
     // reseting prouct to default after adding to cart
     for (const input of thisProduct.formInputs) {
 

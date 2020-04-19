@@ -6,13 +6,11 @@ class CartProduct {
     const thisCartProduct = this;
 
     thisCartProduct.id = menuProduct.id;
-    // console.log(thisCartProduct.id);
     thisCartProduct.name = menuProduct.name;
     thisCartProduct.price = menuProduct.price;
     thisCartProduct.priceSingle = menuProduct.priceSingle;
     thisCartProduct.amount = menuProduct.amount;
     thisCartProduct.params = JSON.parse(JSON.stringify(menuProduct.params));
-    // console.log(thisCartProduct.params);
     thisCartProduct.getElements(element);
     thisCartProduct.initAmountWidget();
     thisCartProduct.initActions();
@@ -58,7 +56,6 @@ class CartProduct {
 
   edit() {
     const thisCartProduct = this;
-    // console.log(thisCartProduct);
     const event = new CustomEvent('edit', {
       bubbles: true,
       detail: {

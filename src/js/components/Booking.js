@@ -178,7 +178,6 @@ class Booking {
       //table is not saved when red mark desappear
       thisBooking.activeTable = null;
       //reset array
-      // thisBooking.activeTableArray.length = 0;
       thisBooking.activeTableArray = [];
     });
   }
@@ -186,20 +185,13 @@ class Booking {
   trigger(e) {
     // const thisBooking = this;
     const clicked = e.target;
-    console.log('trigger dziala');
     // array to store many tables 
-
 
     if (!clicked.classList.contains(classNames.booking.tableBooked)) {
       // loop and toggle instead of add for multitable
 
-      // for (const table of this.dom.tables) {
-      //   table.classList.remove('chosen');
-      // }
       clicked.classList.toggle('chosen');
       // taking some data needed for payload before succesfull validation
-
-      // this.activeTable = parseInt(clicked.dataset['table'], 10);
     }
     //push active tables in to array
     this.activeTableArray.push(parseInt(clicked.dataset['table'], 10));
@@ -222,9 +214,6 @@ class Booking {
     const thisBooking = this;
 
     for (const table of thisBooking.dom.tables) {
-      // console.log(table.classList.contains('booked'));
-      // console.log(table.classList);
-
       table.addEventListener('click', thisBooking.trigger.bind(thisBooking));
     }
   }
@@ -254,7 +243,6 @@ class Booking {
       }
 
       //check if table marked
-      console.log(thisBooking.activeTableArray);
       if (!thisBooking.activeTableArray.length) {
         thisBooking.dom.floorPlan.style.borderColor = 'red';
         return;
@@ -323,7 +311,6 @@ class Booking {
 
         // duration and table has to be passed as numbers
         thisBooking.makeBooked(thisBooking.datePicker.value, utils.numberToHour(thisBooking.hour), thisBooking.hoursAmount.value, active);
-        console.log(thisBooking.booked);
       }
 
       // reset after sending to API
@@ -333,9 +320,7 @@ class Booking {
       thisBooking.peopleAmount.value = 1;
       thisBooking.hoursAmount.value = 1;
       thisBooking.activeTable = null;
-      // thisBooking.activeTableArray.length = 0;
       thisBooking.activeTableArray = [];
-      console.log(thisBooking.activeTableArray);
       thisBooking.dom.floorPlan.style.borderColor = 'black';
       thisBooking.initWidgets();
     });

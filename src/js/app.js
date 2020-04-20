@@ -105,6 +105,7 @@ const app = {
     const thisApp = this;
     let activeElement = 0;
     const caruselDots = document.querySelectorAll('.carusel-dots i');
+    const caruselContainer = document.querySelector('.carusel-place');
     //data for hanlebars
     const caruselImages = ['assets/pizza-3.jpg', 'assets/pizza-4.jpg',
       'assets/pizza-5.jpg'
@@ -118,22 +119,10 @@ const app = {
       h2Line: 'ALLWAYS GREAT !',
       author: 'Joe Nelson',
     });
-
-    const element = utils.createDOMFromHTML(generatedHTML);
-
-    const menuContainer = document.querySelector('.carusel-place');
-// clearing unnecessary elements
-    const menuWrap = document.querySelectorAll('.carusel-place .carusel');
-    for (const mCon of menuWrap) {
-      mCon.remove();
-    }
-
-    menuContainer.appendChild(element);
-
-
-
+    componentUsedInHandlebars(generatedHTML);
+    caruselDots[2].classList.add('active');
+    caruselDots[0].classList.remove('active');
     // simple loop
-
     function changeElement() {
 
       if (activeElement == caruselImages.length) {
@@ -142,7 +131,6 @@ const app = {
       //simple active dot adder
       for (const dot of caruselDots) {
         dot.classList.remove('active');
-
       }
 
       //data for handlebars
@@ -151,34 +139,29 @@ const app = {
         h2Line: caruselH2[activeElement],
         author: caruselAuthor[activeElement],
       };
-
       //generate HTML based on templated
-      const generatedHTML = templates.carusel(caruselData);
-      //create elements using utils.createDOMFromHTML
-      const element = utils.createDOMFromHTML(generatedHTML);
-      //find menu container
-
-
+      const generated = templates.carusel(caruselData);
+      console.log(generated);
       caruselDots[activeElement].classList.add('active');
 
 
-
-      // clearing unnecessary elements
-      const menuWrap = document.querySelectorAll('.carusel-place .carusel');
-      for (const mCon of menuWrap) {
-        mCon.remove();
-      }
-
-      //add element to menu
-      menuContainer.appendChild(element);
+      componentUsedInHandlebars(generated);
 
       activeElement++;
-
     }
 
     clearInterval(thisApp.intervalValue);
     thisApp.intervalValue = setInterval(changeElement, 3000);
 
+    function componentUsedInHandlebars(generated) {
+      const element = utils.createDOMFromHTML(generated);
+      // clearing unnecessary elements
+      const caruselWrap = document.querySelectorAll('.carusel-place .carusel');
+      for (const carWr of caruselWrap) {
+        carWr.remove();
+      }
+      caruselContainer.appendChild(element);
+    }
   },
 
   initBooking: function (tables) {

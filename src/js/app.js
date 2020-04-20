@@ -104,64 +104,81 @@ const app = {
   caruselInit() {
     const thisApp = this;
     let activeElement = 0;
-    // needed elements from page
-    // const caruselImagesHTML = document.querySelector('article.carusel.carusel-picture');
-    // const caruselH2HTML = document.querySelector('article.carusel .carusel-text-content h2');
-    // const caruselAuthorHTML = document.querySelector('article.carusel .carusel-author');
     const caruselDots = document.querySelectorAll('.carusel-dots i');
-
-    // data in arrays could be possibly taken from API in future
+    //data for hanlebars
     const caruselImages = ['assets/pizza-3.jpg', 'assets/pizza-4.jpg',
       'assets/pizza-5.jpg'
     ];
     const caruselH2 = ['AMAZING SERVICE !', 'RECOMENNDED !', ' SIMPLY BEST !', 'ALLWAYS GREAT !'];
     const caruselAuthor = ['-Mike Allford', '-Jack Black', '-Edmund West', 'Joe Nelson'];
 
+    //to display first carusel
+    const generatedHTML = templates.carusel({
+      src: 'assets/pizza-5.jpg',
+      h2Line: 'ALLWAYS GREAT !',
+      author: 'Joe Nelson',
+    });
+
+    const element = utils.createDOMFromHTML(generatedHTML);
+
+    const menuContainer = document.querySelector('.carusel-place');
+// clearing unnecessary elements
+    const menuWrap = document.querySelectorAll('.carusel-place .carusel');
+    for (const mCon of menuWrap) {
+      mCon.remove();
+    }
+
+    menuContainer.appendChild(element);
+
+
+
     // simple loop
+
     function changeElement() {
-      // console.log(caruselImages[2])
-      // console.log(caruselImages[activeElement])
+
       if (activeElement == caruselImages.length) {
         activeElement = 0;
       }
       //simple active dot adder
       for (const dot of caruselDots) {
         dot.classList.remove('active');
-      }
-      caruselDots[activeElement].classList.add('active');
 
+      }
+
+      //data for handlebars
       let caruselData = {
         src: caruselImages[activeElement],
         h2Line: caruselH2[activeElement],
         author: caruselAuthor[activeElement],
       };
-      console.log(caruselData);
-      // console.log(templates.bookingWidget)
+
+      //generate HTML based on templated
       const generatedHTML = templates.carusel(caruselData);
-      console.log(generatedHTML);
-      let element = utils.createDOMFromHTML(generatedHTML);
-      console.log(element);
+      //create elements using utils.createDOMFromHTML
+      const element = utils.createDOMFromHTML(generatedHTML);
+      //find menu container
 
-      const carusel = thisApp.pages[0].querySelector('#template-carusel');
-      console.log(carusel);
 
-     
-      carusel.insertAdjacentHTML('afterend', generatedHTML);
-
-    
+      caruselDots[activeElement].classList.add('active');
 
 
 
+      // clearing unnecessary elements
+      const menuWrap = document.querySelectorAll('.carusel-place .carusel');
+      for (const mCon of menuWrap) {
+        mCon.remove();
+      }
 
+      //add element to menu
+      menuContainer.appendChild(element);
 
-      // caruselImagesHTML.src = caruselImages[activeElement];
-      // caruselH2HTML.textContent = caruselH2[activeElement];
-      // caruselAuthorHTML.textContent = caruselAuthor[activeElement];
       activeElement++;
+
     }
+
     clearInterval(thisApp.intervalValue);
     thisApp.intervalValue = setInterval(changeElement, 3000);
-    
+
   },
 
   initBooking: function (tables) {

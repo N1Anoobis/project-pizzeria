@@ -86,18 +86,9 @@
             <p>TUE - SUN, 12PM - 12AM</p>
           </div>
         </div>
-        <script id="template-carusel" type="text/x-handlebars-template">
-          <article class="carusel">
-            <img src={{ src }} alt="">
-          <div class="carusel-text-content">
-            <h2>AMAZING SERVICE !</h2>
-            <P class="carusel-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus nam eveniet
-              eius. Maxime ratione quos
-              ut odio reiciendis reprehenderit </P>
-            <p class="carusel-author">{{ author }}</p>
-          </div>
-        </article>
-      </script>
+
+        <div id="caruswl-place" class="carusel-place container"></div>
+
         <div class="carusel-dots">
           <i id="dot1" class="fas fa-circle active"></i>
           <i id="dot2" class="fas fa-circle"></i>
@@ -146,6 +137,18 @@
       <div class="booking-wrapper container"></div>
     </section>
   </div>
+
+  <script id="template-carusel" type="text/x-handlebars-template">
+    <article class="carusel">
+      <img src={{ src }} alt="">
+      <div class="carusel-text-content">
+        <h2>{{ h2Line }}</h2>
+        <P class="carusel-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus nam eveniet
+          eius. Maxime ratione quos
+          ut odio reiciendis reprehenderit </P>
+        <p class="carusel-author">{{ author }}</p>
+      </div>
+    </script>
 
   <script id="template-booking-widget" type="text/x-handlebars-template">
     <div class="booking-widget">

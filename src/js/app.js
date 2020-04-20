@@ -103,7 +103,7 @@ const app = {
 
   caruselInit() {
     const thisApp = this;
-    let activeElement = 0;
+    let activeElement = 2;
     const caruselDots = document.querySelectorAll('.carusel-dots i');
     const caruselContainer = document.querySelector('.carusel-place');
     //data for hanlebars
@@ -114,15 +114,17 @@ const app = {
     const caruselAuthor = ['-Mike Allford', '-Jack Black', '-Edmund West', 'Joe Nelson'];
 
     //to display first carusel
-    const generatedHTML = templates.carusel({
-      src: 'assets/pizza-5.jpg',
-      h2Line: 'ALLWAYS GREAT !',
-      author: 'Joe Nelson',
-    });
+    const generatedHTML = {
+      src: caruselImages[activeElement - 1],
+      h2Line: caruselH2[activeElement - 1],
+      author: caruselAuthor[activeElement - 1],
+    };
+    // pass stuff for handlebars first display
     componentUsedInHandlebars(generatedHTML);
-    caruselDots[2].classList.add('active');
+    caruselDots[1].classList.add('active');
     caruselDots[0].classList.remove('active');
-    // simple loop
+
+    // main loop
     function changeElement() {
 
       if (activeElement == caruselImages.length) {
@@ -139,13 +141,9 @@ const app = {
         h2Line: caruselH2[activeElement],
         author: caruselAuthor[activeElement],
       };
-      //generate HTML based on templated
-      const generated = templates.carusel(caruselData);
-      console.log(generated);
+     
       caruselDots[activeElement].classList.add('active');
-
-
-      componentUsedInHandlebars(generated);
+      componentUsedInHandlebars(caruselData);
 
       activeElement++;
     }
@@ -153,7 +151,10 @@ const app = {
     clearInterval(thisApp.intervalValue);
     thisApp.intervalValue = setInterval(changeElement, 3000);
 
-    function componentUsedInHandlebars(generated) {
+    function componentUsedInHandlebars(generatedHTML) {
+
+      const generated = templates.carusel(generatedHTML);
+
       const element = utils.createDOMFromHTML(generated);
       // clearing unnecessary elements
       const caruselWrap = document.querySelectorAll('.carusel-place .carusel');

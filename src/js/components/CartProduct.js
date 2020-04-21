@@ -101,13 +101,11 @@ class CartProduct {
 
       if (object.hasOwnProperty(key)) {
         const element = object[key];
-        console.log('element', element);
-
+  
         newVar[key] = [];
 
         for (const option in element.options) {
           const singleOption = element.options[option];
-          console.log(singleOption);
 
           newVar[key].push(singleOption);
         }

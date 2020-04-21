@@ -60,7 +60,6 @@ class Product {
 
   edit(recived) {
     const thisProduct = this;
-    console.log('event passed', recived);
 
     const checkedInputs = [];
     for (const param in recived.params) {
@@ -68,7 +67,6 @@ class Product {
         const element = recived.params[param];
 
         for (const key in element.options) {
-          console.log('key', key);
           if (element.options.hasOwnProperty(key)) {
 
             for (const input of thisProduct.formInputs) {
@@ -88,10 +86,8 @@ class Product {
             }
           }
         }
-        console.log(checkedInputs);
       }
     }
-    console.log('current objec state', thisProduct.formInputs);
     //secend set of loops to handle proper display of results
     for (const input of thisProduct.formInputs) {
 
@@ -101,7 +97,6 @@ class Product {
 
           input.checked = true;
         }
-
       }
     }
 
@@ -110,26 +105,6 @@ class Product {
     thisProduct.priceElem.textContent = recived.price;
     thisProduct.amountWidgetElem.querySelector('input').value = recived.amount;
   }
-
-  // version with no if
-  // initAccordion() {
-  //   const thisProduct = this;
-
-  //   const clickedElements = thisProduct.element.querySelectorAll(select.menuProduct.clickable);
-  //   for (const clEl of clickedElements) {
-  //     clEl.addEventListener('click', function (e) {
-  //       e.preventDefault();
-
-  //         console.log('all elements', allInEl);
-
-  //         allInEl.classList.remove('active');
-  //       }
-
-  //       clEl.parentNode.classList.toggle('active');
-
-  //     });
-  //   }
-  // }
 
   initAccordion() {
     const thisProduct = this;
@@ -163,7 +138,6 @@ class Product {
 
   initOrderForm() {
     const thisProduct = this;
-    // console.log('initOrderForm');
     thisProduct.form.addEventListener('submit', function (event) {
       event.preventDefault();
       thisProduct.processOrder();
@@ -194,26 +168,21 @@ class Product {
     /* START LOOP: for each paramId in thisProduct.data.params */
 
     for (const paramID in thisProduct.data.params) {
-      // console.log('paramID', paramID);
       if (thisProduct.data.params.hasOwnProperty(paramID)) {
 
         /* save the element in thisProduct.data.params with key paramId as const param */
         const param = thisProduct.data.params[paramID];
-        // console.log('param', param);
 
         /* START LOOP: for each optionId in param.options */
         for (const optionId in param.options) {
-          // console.log('optionId', optionId);
+
           if (param.options.hasOwnProperty(optionId)) {
 
             /* save the element in param.options with key optionId as const option */
             const option = param.options[optionId];
-            // console.log(option.label);
 
             // check if formData[paramId] exist and then if it contain 
             const optionSelected = formData.hasOwnProperty(paramID) && formData[paramID].indexOf(optionId) > -1;
-
-            // console.log('optionSelected', optionSelected);
 
             /* START IF: if option is selected and option is not default */
             if (optionSelected && !option.default) {
@@ -254,9 +223,6 @@ class Product {
         }
       }
     }
-    // multiply price by amount
-    // price *= thisProduct.amountWidget.value;
-    // thisProduct.priceElem.textContent = price;
     /* multiply price by amount */
     thisProduct.priceSingle = price;
     thisProduct.price = thisProduct.priceSingle * thisProduct.amountWidget.value;
@@ -278,9 +244,6 @@ class Product {
     thisProduct.name = thisProduct.data.name;
     thisProduct.amount = thisProduct.amountWidget.value;
 
-
-    // app.cart.add(thisProduct);
-
     //new custom event 
     const event = new CustomEvent('add-to-cart', {
       bubbles: true,
@@ -291,7 +254,6 @@ class Product {
 
     thisProduct.element.dispatchEvent(event);
 
-    // console.log('data of order allready in class prouct', app.cart);
     // reseting prouct to default after adding to cart
     for (const input of thisProduct.formInputs) {
 
